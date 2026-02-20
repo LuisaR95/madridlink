@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Madrid Link - Mis Trámites</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: auto; }
+        .card { background: white; padding: 20px; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 5px solid #d32f2f; }
+        h1 { text-align: center; color: #d32f2f; }
+        h2 { margin-top: 0; }
+        .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.8em; background: #ffebee; color: #c62828; }
+        .completado { background: #e8f5e9; color: #2e7d32; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📍 MadriLink</h1>
+    <div th:each="t : ${tramites}" class="card">
+        <h2 th:text="${t.titulo}">Título</h2>
+        <p th:text="${t.descripcion}">Descripción</p>
+        <span class="badge" th:classappend="${t.completado} ? 'completado' : ''"
+              th:text="${t.completado ? '✅ Finalizado' : '⏳ En proceso'}">Estado</span>
+    </div>
+</div>
+</body>
+</html>
