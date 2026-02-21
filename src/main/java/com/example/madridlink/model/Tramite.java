@@ -22,23 +22,71 @@ public class Tramite {
     @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL)
     private List<Documento> documentos;
 
-    public Tramite() {}
+    public Tramite() {
+    }
 
     // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-    public boolean isCompletado() { return completado; }
-    public void setCompletado(boolean completado) { this.completado = completado; }
-    public List<Documento> getDocumentos() { return documentos; }
-    public void setDocumentos(List<Documento> documentos) { this.documentos = documentos; }
-    public String getPlazo() { return plazo; }
-    public void setPlazo(String plazo) { this.plazo = plazo; }
-    public String getUbicacion() { return ubicacion; }
-    public void setUbicacion(String ubicacion) { this.ubicacion = ubicacion; }
-    public String getUrlCita() { return urlCita; }
-    public void setUrlCita(String urlCita) { this.urlCita = urlCita; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public boolean isCompletado() {
+        return completado;
+    }
+
+    public void setCompletado(boolean completado) {
+        this.completado = completado;
+    }
+
+    public List<Documento> getDocumentos() {
+        return documentos;
+    }
+
+    public void setDocumentos(List<Documento> documentos) {
+        this.documentos = documentos;
+    }
+
+    public String getPlazo() {
+        return plazo;
+    }
+
+    public void setPlazo(String plazo) {
+        this.plazo = plazo;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public String getUrlCita() {
+        return urlCita;
+    }
+
+    public void setUrlCita(String urlCita) {
+        this.urlCita = urlCita;
+    }
 }
