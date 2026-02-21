@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MadriLink - Directorio de Sedes</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: auto; }
+
+        /* Cabecera y Buscador */
+        .header { text-align: center; margin-bottom: 40px; }
+        h1 { color: #d32f2f; }
+        .search-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; gap: 10px; }
+        .search-box input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        .btn-buscar { background: #d32f2f; color: white; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+        /* Rejilla de Sedes */
+        .grid-sedes { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px; }
+        .sede-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.05); border-top: 5px solid #d32f2f; transition: 0.3s; }
+        .sede-card:hover { transform: translateY(-5px); }
+        .sede-card h3 { margin-top: 0; color: #d32f2f; font-size: 1.2em; }
+        .info-item { font-size: 0.9em; margin: 8px 0; color: #555; }
+
+        /* Botones */
+        .btn-mapa { display: inline-block; margin-top: 15px; padding: 10px 15px; background: #4285F4; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 0.85em; }
+        .btn-mapa:hover { background: #357ae8; }
+        .btn-volver { display: inline-block; margin-top: 30px; color: #666; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>📍 Directorio de Sedes y Oficinas</h1>
+        <p>Busca la oficina más cercana para realizar tus trámites</p>
+    </div>
+
+    <form th:action="@{/sedes/buscar}" method="get" class="search-box">
+        <input type="text" name="q" placeholder="Ej: Pradillo, Comisaría, Aluche..." th:value="${param.q}">
+        <button type="submit" class="btn-buscar">Buscar</button>
+    </form>
+
+    <div class="grid-sedes">
+        <div th:each="sede : ${sedes}" class="sede-card">
+            <h3 th:text="${sede.nombre}">Nombre de la Sede</h3>
+            <div class="info-item"><strong>📍 Dirección:</strong> <span th:text="${sede.direccion}">Dirección</span></div>
+            <div class="info-item"><strong>🕒 Horario:</strong> <span th:text="${sede.horario}">Horario</span></div>
+            <div class="info-item"><strong>📞 Teléfono:</strong> <span th:text="${sede.telefono}">Teléfono</span></div>
+
+            <a th:href="'https://www.google.com/maps/search/?api=1&query=' + ${sede.latitud} + ',' + ${sede.longitud}"
+               target="_blank" class="btn-mapa">
+                🗺️ Ver en Google Maps
+            </a>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(sedes)}" style="text-align: center; margin-top: 50px; color: #888;">
+        <p>No se encontraron oficinas con ese nombre. Intenta con otra palabra.</p>
+    </div>
+
+    <a href="/" class="btn-volver">← Volver al inicio</a>
+</div>
+
+</body>
+</html>

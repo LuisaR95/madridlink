@@ -14,6 +14,9 @@ public class Tramite {
     private String titulo;
     private String descripcion;
     private boolean completado;
+    private String plazo;    // Ejemplo: "90 días"
+    private String ubicacion; // Ejemplo: "Calle de Pradillo, 40"
+    private String urlCita;   // Ejemplo: "https://sede.administracionespublicas.gob.es/..."
 
     // Relación: Un trámite tiene muchos documentos
     @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL)
@@ -32,4 +35,10 @@ public class Tramite {
     public void setCompletado(boolean completado) { this.completado = completado; }
     public List<Documento> getDocumentos() { return documentos; }
     public void setDocumentos(List<Documento> documentos) { this.documentos = documentos; }
+    public String getPlazo() { return plazo; }
+    public void setPlazo(String plazo) { this.plazo = plazo; }
+    public String getUbicacion() { return ubicacion; }
+    public void setUbicacion(String ubicacion) { this.ubicacion = ubicacion; }
+    public String getUrlCita() { return urlCita; }
+    public void setUrlCita(String urlCita) { this.urlCita = urlCita; }
 }

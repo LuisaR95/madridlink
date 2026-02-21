@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MadriLink - Detalle del Trámite</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; padding: 20px; color: #333; }
+        .container { max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+
+        /* Cabecera */
+        h1 { color: #d32f2f; margin-bottom: 10px; border-bottom: 2px solid #f4f4f4; padding-bottom: 10px; }
+        .desc-principal { font-size: 1.1em; color: #666; line-height: 1.6; margin-bottom: 25px; }
+
+        /* Ficha Técnica (Nuevos campos) */
+        .ficha-tecnica { background: #fff8f8; border: 1px solid #ffdde1; padding: 20px; border-radius: 10px; margin-bottom: 30px; }
+        .ficha-tecnica h3 { margin-top: 0; color: #c62828; font-size: 1em; text-transform: uppercase; letter-spacing: 1px; }
+        .dato { margin: 10px 0; display: flex; align-items: center; }
+        .dato strong { width: 140px; color: #555; }
+        .link-cita { background: #d32f2f; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.9em; }
+        .link-cita:hover { background: #b71c1c; }
+
+        /* Lista de Documentos */
+        .seccion-docs h3 { border-left: 5px solid #d32f2f; padding-left: 10px; margin-bottom: 20px; }
+        .doc-item { background: #fafafa; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #eee; }
+
+        /* Botones Interactivos */
+        .btn-check { border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.3s; min-width: 120px; }
+        .btn-listo { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
+        .btn-pendiente { background-color: #fff3e0; color: #ef6c00; border: 1px solid #ef6c00; }
+        .btn-check:hover { transform: scale(1.05); }
+
+        /* Botón Volver */
+        .btn-volver { display: inline-block; margin-top: 30px; text-decoration: none; color: #666; font-weight: bold; transition: 0.3s; }
+        .btn-volver:hover { color: #d32f2f; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 th:text="${tramite.titulo}">Título del Trámite</h1>
+    <p class="desc-principal" th:text="${tramite.descripcion}">Descripción completa del trámite aquí.</p>
+
+    <div class="ficha-tecnica">
+        <h3>📍 Información Útil</h3>
+        <div class="dato">
+            <strong>⏳ Plazo máximo:</strong>
+            <span th:text="${tramite.plazo != null ? tramite.plazo : 'No especificado'}">90 días</span>
+        </div>
+        <div class="dato">
+            <strong>🏢 Ubicación:</strong>
+            <span th:text="${tramite.ubicacion != null ? tramite.ubicacion : 'Consultar en cita'}">Calle Pradillo, 40</span>
+        </div>
+        <div class="dato" style="margin-top: 20px;">
+            <a th:href="${tramite.urlCita}" target="_blank" class="link-cita">📅 Pedir Cita Previa</a>
+        </div>
+    </div>
+
+    <div class="seccion-docs" id="lista-documentos">
+        <h3>📋 Requisitos y Documentación</h3>
+        <div th:each="doc : ${documentos}" class="doc-item">
+            <span th:text="${doc.nombre}">Nombre del documento</span>
+
+            <form th:action="@{'/documento/marcar/' + ${doc.id}}" method="post">
+                <button type="submit"
+                        th:class="${doc.marcado} ? 'btn-check btn-listo' : 'btn-check btn-pendiente'"
+                        th:text="${doc.marcado ? '✅ Listo' : '⏳ Pendiente'}">
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <a href="/" class="btn-volver">← Volver al listado principal</a>
+</div>
+
+</body>
+</html>
