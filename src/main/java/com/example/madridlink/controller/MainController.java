@@ -59,11 +59,12 @@ public class MainController {
             documentoRepository.save(doc);
 
             // 4. Redirigimos a la página del trámite para ver el check actualizado
-            return "redirect:/tramite/"  + doc.getTramite().getId() + "#lista-documentos";
+            return "redirect:/tramite/" + doc.getTramite().getId() + "#lista-documentos";
         }
 
         return "redirect:/";
     }
+
     @GetMapping("/sedes")
     public String buscarSedes(@RequestParam(name = "q", required = false) String query, Model model) {
         if (query != null && !query.isEmpty()) {
