@@ -65,7 +65,7 @@ public class MainController {
         return "redirect:/";
     }
 
-    @GetMapping("/sedes")
+    @GetMapping("/sedes/buscar")
     public String buscarSedes(@RequestParam(name = "q", required = false) String query, Model model) {
         if (query != null && !query.isEmpty()) {
             // Aquí es donde llamamos a tu método del Repository
