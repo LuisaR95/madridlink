@@ -52,13 +52,13 @@ public class MainController {
         Documento doc = documentoRepository.findById(id).orElse(null);
 
         if (doc != null) {
-            // 2. Cambiamos el estado (si estaba en true pasa a false y viceversa)
+            // 2. Cambia el estado (si estaba en true pasa a false y viceversa)
             doc.setMarcado(!doc.isMarcado());
 
-            // 3. Guardamos el cambio en la base de datos
+            // 3. Guarda el cambio en la base de datos
             documentoRepository.save(doc);
 
-            // 4. Redirigimos a la página del trámite para ver el check actualizado
+            // 4. Redirige a la página del trámite para ver el check actualizado
             return "redirect:/tramite/" + doc.getTramite().getId() + "#lista-documentos";
         }
 
@@ -68,7 +68,7 @@ public class MainController {
     @GetMapping("/sedes/buscar")
     public String buscarSedes(@RequestParam(name = "q", required = false) String query, Model model) {
         if (query != null && !query.isEmpty()) {
-            // Aquí es donde llamamos a tu método del Repository
+            // Se llama al método del Repository
             model.addAttribute("sedes", sedeRepository.findByNombreContaining(query));
         } else {
             model.addAttribute("sedes", sedeRepository.findAll());

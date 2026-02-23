@@ -22,7 +22,7 @@ public class MadridlinkApplication {
     CommandLineRunner initData(TramiteRepository tramiteRepo, DocumentoRepository docRepo, SedeRepository sedeRepo) {
         return args -> {
             if (tramiteRepo.count() == 0) {
-                // 1. Creamos el Trámite del NIE
+                // 1. Creación del Trámite del NIE
                 Tramite nie = new Tramite();
                 nie.setTitulo("NIE Inicial");
                 nie.setDescripcion("Solicitud de residencia para ciudadanos extranjeros.");
@@ -32,11 +32,11 @@ public class MadridlinkApplication {
                 nie.setCompletado(false);
                 tramiteRepo.save(nie);
 
-                // 2. Creamos documentos para el NIE
+                // 2. Creación documentos para el NIE
                 Documento doc1 = new Documento();
                 doc1.setNombre("Pasaporte Original");
                 doc1.setMarcado(true);
-                doc1.setTramite(nie); // <--- AQUÍ está el "pegamento"
+                doc1.setTramite(nie);
                 docRepo.save(doc1);
 
                 Documento doc2 = new Documento();
@@ -45,7 +45,7 @@ public class MadridlinkApplication {
                 doc2.setTramite(nie);
                 docRepo.save(doc2);
 
-                // 3. Creamos otro Trámite (Empadronamiento)
+                // 3. Creación Trámite (Empadronamiento)
                 Tramite padron = new Tramite();
                 padron.setTitulo("Empadronamiento");
                 padron.setDescripcion("Registro en el ayuntamiento de Madrid.");
