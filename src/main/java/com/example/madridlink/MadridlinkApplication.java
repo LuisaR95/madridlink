@@ -1,15 +1,17 @@
 package com.example.madridlink;
 
+import com.example.madridlink.model.Consejo;
 import com.example.madridlink.model.Tramite;
+import com.example.madridlink.model.Documento;
+import com.example.madridlink.model.Sede;
+import com.example.madridlink.repository.ConsejoRepository;
 import com.example.madridlink.repository.SedeRepository;
 import com.example.madridlink.repository.TramiteRepository;
+import com.example.madridlink.repository.DocumentoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import com.example.madridlink.model.Documento;
-import com.example.madridlink.repository.DocumentoRepository;
-import com.example.madridlink.model.Sede;
 
 @SpringBootApplication
 public class MadridlinkApplication {
@@ -19,10 +21,10 @@ public class MadridlinkApplication {
     }
 
     @Bean
-    CommandLineRunner initData(TramiteRepository tramiteRepo, DocumentoRepository docRepo, SedeRepository sedeRepo) {
+    CommandLineRunner initData(TramiteRepository tramiteRepo, DocumentoRepository docRepo, SedeRepository sedeRepo, ConsejoRepository consejoRepo) {
         return args -> {
+            // --- 1. CARGA DE TRÁMITES ---
             if (tramiteRepo.count() == 0) {
-                // 1. Creación del Trámite del NIE
                 Tramite nie = new Tramite();
                 nie.setTitulo("NIE Inicial");
                 nie.setDescripcion("Solicitud de residencia para ciudadanos extranjeros.");
@@ -32,7 +34,6 @@ public class MadridlinkApplication {
                 nie.setCompletado(false);
                 tramiteRepo.save(nie);
 
-                // 2. Creación documentos para el NIE
                 Documento doc1 = new Documento();
                 doc1.setNombre("Pasaporte Original");
                 doc1.setMarcado(true);
@@ -45,7 +46,6 @@ public class MadridlinkApplication {
                 doc2.setTramite(nie);
                 docRepo.save(doc2);
 
-                // 3. Creación Trámite (Empadronamiento)
                 Tramite padron = new Tramite();
                 padron.setTitulo("Empadronamiento");
                 padron.setDescripcion("Registro en el ayuntamiento de Madrid.");
@@ -58,11 +58,11 @@ public class MadridlinkApplication {
                 doc3.setTramite(padron);
                 docRepo.save(doc3);
 
-                System.out.println("✅ DATOS SEMILLA (TRÁMITES Y DOCS) CREADOS");
+                System.out.println("✅ DATOS SEMILLA CREADOS");
             }
 
+            // --- 2. CARGA DE SEDES ---
             if (sedeRepo.count() == 0) {
-                // SEDE 1: Calle Pradillo
                 Sede s1 = new Sede();
                 s1.setNombre("Oficina de Extranjería - Calle Pradillo");
                 s1.setDireccion("Calle de Pradillo, 40, 28002 Madrid");
@@ -72,7 +72,6 @@ public class MadridlinkApplication {
                 s1.setLongitud(-3.674442);
                 sedeRepo.save(s1);
 
-                // SEDE 2: Manuel Luna (DNI y NIE)
                 Sede s2 = new Sede();
                 s2.setNombre("Comisaría de Policía - Manuel Luna");
                 s2.setDireccion("Calle de Manuel Luna, 29, 28020 Madrid");
@@ -82,7 +81,6 @@ public class MadridlinkApplication {
                 s2.setLongitud(-3.703274);
                 sedeRepo.save(s2);
 
-                // SEDE 3: Aluche (CIE y Asilo)
                 Sede s3 = new Sede();
                 s3.setNombre("Oficina de Extranjería - Aluche");
                 s3.setDireccion("Avenida de los Poblados, s/n, 28044 Madrid");
@@ -92,10 +90,25 @@ public class MadridlinkApplication {
                 s3.setLongitud(-3.755057);
                 sedeRepo.save(s3);
 
-                System.out.println("✅ Sedes cargadas correctamente en la base de datos");
+                System.out.println("✅ SEDES CARGADAS");
             }
-        };
-    }
-}
 
+            // --- 3. CARGA DE CONSEJOS (AQUÍ ESTABA EL ERROR) ---
+            if (consejoRepo.count() == 0) {
+                Consejo c1 = new Consejo();
+                c1.setAutor("Carlos R.");
+                c1.setCategoria("Sede Aluche");
+                c1.setContenido("Fui ayer a por el NIE. Si llevas la tasa pagada desde el banco te ahorras mucha cola. ¡Ánimo!");
+                consejoRepo.save(c1);
 
+                Consejo c2 = new Consejo();
+                c2.setAutor("Elena M.");
+                c2.setCategoria("Empadronamiento");
+                c2.setContenido("En el Ayuntamiento de Chamberí están dando citas bastante rápido para el padrón.");
+                consejoRepo.save(c2);
+
+                System.out.println("✅ CONSEJOS CARGADOS");
+            }
+        }; // Cierre del return args
+    } // Cierre del Bean initData
+} // Cierre de la clase
