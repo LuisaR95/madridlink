@@ -67,6 +67,8 @@ public class MainController {
     public String comunidad(Model model) {
         model.addAttribute("consejos", consejoRepository.findAll());
         model.addAttribute("nuevoConsejo", new Consejo());
+        // Añadimos esto para que el desplegable tenga opciones:
+        model.addAttribute("todosLosTramites", tramiteRepository.findAll());
         return "comunidad";
     }
 

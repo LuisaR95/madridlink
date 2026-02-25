@@ -14,79 +14,55 @@ public class Tramite {
     private String titulo;
     private String descripcion;
     private boolean completado;
-    private String plazo;    // Ejemplo: "90 días"
-    private String ubicacion; // Ejemplo: "Calle de Pradillo, 40"
-    private String urlCita;   // Ejemplo: "https://sede.administracionespublicas.gob.es/..."
+    private String plazo;
+    private String ubicacion;
+    private String urlCita;
 
-    // Relación: Un trámite tiene muchos documentos
+    // 1. Relación con Documentos (YA LA TENÍAS)
     @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL)
     private List<Documento> documentos;
+
+    // 2. NUEVA: Relación con la Sede (Muchos trámites pertenecen a una Sede)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "sede_id")
+    private Sede sede;
+
+    // 3. NUEVA: Relación con Consejos (Un trámite tiene muchos consejos)
+    @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL)
+    private List<Consejo> consejos;
 
     public Tramite() {
     }
 
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
+    // --- GETTERS Y SETTERS ---
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
 
-    public String getTitulo() {
-        return titulo;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
+    public boolean isCompletado() { return completado; }
+    public void setCompletado(boolean completado) { this.completado = completado; }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+    public List<Documento> getDocumentos() { return documentos; }
+    public void setDocumentos(List<Documento> documentos) { this.documentos = documentos; }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public String getPlazo() { return plazo; }
+    public void setPlazo(String plazo) { this.plazo = plazo; }
 
-    public boolean isCompletado() {
-        return completado;
-    }
+    public String getUbicacion() { return ubicacion; }
+    public void setUbicacion(String ubicacion) { this.ubicacion = ubicacion; }
 
-    public void setCompletado(boolean completado) {
-        this.completado = completado;
-    }
+    public String getUrlCita() { return urlCita; }
+    public void setUrlCita(String urlCita) { this.urlCita = urlCita; }
 
-    public List<Documento> getDocumentos() {
-        return documentos;
-    }
+    // GETTERS Y SETTERS DE LAS NUEVAS RELACIONES
+    public Sede getSede() { return sede; }
+    public void setSede(Sede sede) { this.sede = sede; }
 
-    public void setDocumentos(List<Documento> documentos) {
-        this.documentos = documentos;
-    }
-
-    public String getPlazo() {
-        return plazo;
-    }
-
-    public void setPlazo(String plazo) {
-        this.plazo = plazo;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
-    }
-
-    public String getUrlCita() {
-        return urlCita;
-    }
-
-    public void setUrlCita(String urlCita) {
-        this.urlCita = urlCita;
-    }
+    public List<Consejo> getConsejos() { return consejos; }
+    public void setConsejos(List<Consejo> consejos) { this.consejos = consejos; }
 }

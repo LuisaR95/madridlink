@@ -13,18 +13,20 @@
             text-align: center;
             margin: 20px 0; padding: 20px; background: #fff5f5;
             border-radius: 15px; border: 2px dashed #ffcdd2;
+            display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;
         }
         .btn-directorio {
             background: #d32f2f; color: white; padding: 12px 25px;
             text-decoration: none; border-radius: 30px; font-weight: bold;
-            display: inline-block; transition: 0.3s;
+            display: inline-block; transition: 0.3s; border: none;
         }
         .btn-directorio:hover { background: #b71c1c; transform: scale(1.05); }
 
         .tramite-card {
             padding: 20px; border: 1px solid #eee; border-radius: 12px;
-            margin-bottom: 20px; background: #fff;
+            margin-bottom: 20px; background: #fff; transition: 0.2s;
         }
+        .tramite-card:hover { border-color: #d32f2f; }
         .tramite-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .tramite-titulo { font-weight: bold; font-size: 1.2em; color: #222; }
 
@@ -38,6 +40,8 @@
         }
         .link-ver { color: #d32f2f; text-decoration: none; font-weight: bold; font-size: 0.9em; }
         h3 { margin-top: 30px; border-left: 4px solid #d32f2f; padding-left: 10px; }
+
+        .badge-sede { background: #eee; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; color: #555; }
     </style>
 </head>
 <body>
@@ -47,8 +51,7 @@
     <p class="subtitle">Tu guía personal para trámites en Madrid</p>
 
     <div class="nav-directorio">
-        <p style="margin-top: 0;">¿Necesitas saber dónde ir?</p>
-        <a href="/sedes/buscar" class="btn-directorio">🔍 Buscar Oficinas y Sedes</a>
+        <a href="/sedes/buscar" class="btn-directorio">🔍 Buscar Oficinas</a>
         <a href="/comunidad" class="btn-directorio" style="background: #2196F3;">👥 Comunidad</a>
     </div>
 
@@ -56,24 +59,31 @@
 
     <div th:each="t : ${tramites}" class="tramite-card">
         <div class="tramite-header">
-            <span class="tramite-titulo" th:text="${t.titulo}">Título</span>
+            <div>
+                <span class="tramite-titulo" th:text="${t.titulo}">Título del Trámite</span>
+                <br>
+                <small class="badge-sede" th:if="${t.sede != null}" th:text="${t.sede?.nombre}">Nombre de la Sede</small>
+            </div>
+
             <span th:if="${t.completado}" style="color: green; font-weight: bold;">✅ Finalizado</span>
-            <span th:unless="${t.completado}" style="color: #666; font-size: 0.9em;">En proceso...</span>
+            <span th:unless="${t.completado}" style="color: #d32f2f; font-size: 0.8em; font-weight: bold;">⏳ PENDIENTE</span>
         </div>
 
         <div class="progress-container">
             <div class="progress-bar"
-                 th:style="'width: ' + (${t.completado} ? '100%' : '30%')">
+                 th:style="'width: ' + (${t.completado} ? '100%' : '40%')">
             </div>
         </div>
 
-        <div style="text-align: right;">
-            <a th:href="@{'/tramite/' + ${t.id}}" class="link-ver">Gestionar documentos →</a>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8em; color: #888;" th:text="${t.plazo}">Plazo: 30 días</span>
+            <a th:href="@{/tramite/{id}(id=${t.id})}" class="link-ver">Gestionar documentos →</a>
         </div>
     </div>
 
-    <div th:if="${#lists.isEmpty(tramites)}" style="text-align: center; color: #999; margin-top: 20px;">
-        <p>No tienes trámites agregados todavía.</p>
+    <div th:if="${#lists.isEmpty(tramites)}" style="text-align: center; color: #999; margin-top: 40px; padding: 20px; border: 2px dashed #ccc; border-radius: 10px;">
+        <p>Aún no hay trámites cargados en el sistema.</p>
+        <p><small>Asegúrate de que el archivo <b>import.sql</b> esté en resources.</small></p>
     </div>
 </div>
 
