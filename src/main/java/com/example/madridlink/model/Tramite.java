@@ -31,7 +31,7 @@ public class Tramite {
     public Tramite() {
     }
 
-    // --- NUEVO MÉTODO PARA LA BARRA (Añadido aquí) ---
+
     public int getProgresoCalculado() {
         if (documentos == null || documentos.isEmpty()) {
             return completado ? 100 : 0;

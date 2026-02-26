@@ -22,5 +22,5 @@ INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marca
 INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (7, 'Solicitud Tarjeta', 'Formulario oficial', 'Original', 'Gratis', true, false, 3);
 
 -- 6. CONSEJOS
-INSERT INTO consejo (id, autor, categoria, contenido, tramite_id) VALUES (1, 'Beatriz', 'NIE', 'Llevad el pasaporte original.', 1);
-INSERT INTO consejo (id, autor, categoria, contenido, tramite_id) VALUES (2, 'Carlos', 'Padrón', 'Pedid la cita con tiempo.', 2);
+INSERT INTO consejo (autor, categoria, contenido, tramite_id) VALUES ('Beatriz', 'NIE', 'Llevad el pasaporte original.', 1);
+INSERT INTO consejo (autor, categoria, contenido, tramite_id) VALUES ('Carlos', 'Padrón', 'Pedir la cita con tiempo.', 2);

@@ -14,7 +14,7 @@ public class Consejo {
     @Column(length = 500)
     private String contenido;
 
-    // 🔗 CONEXIÓN: Muchos consejos pertenecen a un trámite
+    // Muchos consejos pertenecen a un trámite
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tramite_id")
     private Tramite tramite;
@@ -35,7 +35,7 @@ public class Consejo {
     public String getContenido() { return contenido; }
     public void setContenido(String contenido) { this.contenido = contenido; }
 
-    // 📝 ¡IMPORTANTE! Getters y Setters para la relación
+    //  Getters y Setters para la relación
     public Tramite getTramite() { return tramite; }
     public void setTramite(Tramite tramite) { this.tramite = tramite; }
 }

@@ -4,70 +4,41 @@
     <meta charset="UTF-8">
     <title>MadriLink - Comunidad</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
+        :root { --primary: #1e3a8a; --bg: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 40px 20px; }
         .container { max-width: 700px; margin: auto; }
-        .header { text-align: center; color: #d32f2f; margin-bottom: 30px; }
-
-        .post { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-left: 5px solid #d32f2f; transition: 0.3s; }
-        .post:hover { transform: scale(1.01); }
-        .user-info { font-weight: bold; color: #333; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .user-avatar { width: 35px; height: 35px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
-        .content { color: #555; line-height: 1.5; white-space: pre-wrap; font-size: 0.95em; }
-
-        .tag { font-size: 0.75em; background: #ffebee; color: #d32f2f; padding: 4px 10px; border-radius: 6px; margin-left: auto; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        .form-post { background: white; padding: 25px; border-radius: 12px; margin-top: 40px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-top: 5px solid #2196F3; }
-        .form-post h3 { margin-top: 0; color: #333; margin-bottom: 15px; }
-        .form-group { margin-bottom: 15px; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
-
-        .btn-publicar { background: #2196F3; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1em; transition: 0.3s; }
-        .btn-publicar:hover { background: #1976D2; }
-
-        .btn-volver { display: inline-block; margin-top: 10px; margin-bottom: 40px; color: #666; text-decoration: none; font-weight: bold; }
-        .btn-volver:hover { color: #d32f2f; }
-
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555; }
+        .post { background: white; padding: 25px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .author { font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .tag { font-size: 0.7rem; background: #eff6ff; color: #1d4ed8; padding: 3px 10px; border-radius: 6px; }
+        .form-card { background: white; padding: 30px; border-radius: 20px; border-top: 4px solid var(--primary); }
+        textarea, input, select { width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
-
 <div class="container">
-    <div class="header">
-        <h1>👥 Comunidad MadriLink</h1>
-        <p>Consejos y experiencias de otros ciudadanos</p>
-    </div>
+    <h1 style="text-align: center; color: var(--primary);">👥 Comunidad MadriLink</h1>
 
     <div th:each="c : ${consejos}" class="post">
-        <div class="user-info">
-            <div class="user-avatar">👤</div>
-            <span th:text="${c.autor != null ? c.autor : 'Usuario Anónimo'}">Nombre</span>
-            <span class="tag" th:if="${c.tramite != null}" th:text="${c.tramite.titulo}">Categoría</span>
+        <div class="author">
+            👤 <span th:text="${c.autor}">Nombre</span>
+            <span class="tag" th:if="${c.tramite != null}" th:text="${c.tramite.titulo}">Trámite</span>
         </div>
-        <div class="content" th:text="${c.contenido}">Contenido del mensaje...</div>
+        <p th:text="${c.contenido}" style="margin-top: 15px; line-height: 1.6;"></p>
     </div>
 
-    <div th:if="${#lists.isEmpty(consejos)}" style="text-align: center; color: #999; padding: 20px;">
-        <p>Aún no hay consejos. ¡Sé el primero en escribir uno abajo!</p>
-    </div>
-
-    <div class="form-post">
-        <h3>¿Tienes algún consejo? Compártelo:</h3>
+    <div class="form-card">
+        <h3 style="margin-top:0;">¿Quieres ayudar a otros?</h3>
         <form th:action="@{/comunidad/publicar}" th:object="${nuevoConsejo}" method="post">
-            <div class="form-group">
-                <label>Tu nombre:</label>
-                <input type="text" th:field="*{autor}" placeholder="Ej: Beatriz D." required>
-            </div>
-
-            <div class="form-group">
-                <label>¿Sobre qué trámite es tu consejo?</label>
-                <select th:field="*{tramite.id}" required>
-                    <option value="" selected disabled>Selecciona un trámite...</option>
-                    <option th:each="t : ${todosLosTramites}"
-                            th:value="${t.id}"
-                            th:text="${t.titulo}">
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-group">
+            <input type="text" th:field="*{autor}" placeholder="Tu nombre" required>
+            <select name="tramiteId" required>
+                <option value="" disabled selected>Selecciona el trámite...</option>
+                <option th:each="t : ${todosLosTramites}" th:value="${t.id}" th:text="${t.titulo}"></option>
+            </select>
+            <textarea th:field="*{contenido}" rows="4" placeholder="Escribe tu consejo aquí..." required></textarea>
+            <button type="submit" style="width:100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: 700; cursor: pointer;">Publicar mi consejo</button>
+        </form>
+    </div>
+    <div style="text-align:center; margin-top: 20px;"><a href="/" style="color: #64748b; font-weight: 600; text-decoration: none;">← Volver al inicio</a></div>
+</div>
+</body>
+</html>

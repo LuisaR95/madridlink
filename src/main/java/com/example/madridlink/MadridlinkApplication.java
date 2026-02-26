@@ -19,8 +19,7 @@ public class MadridlinkApplication {
     @Bean
     CommandLineRunner initData(TramiteRepository tramiteRepo, DocumentoRepository docRepo, SedeRepository sedeRepo, ConsejoRepository consejoRepo) {
         return args -> {
-            // Hemos vaciado el código de aquí porque ahora usamos el archivo import.sql
-            // Esto evita errores de "ID duplicado" o fallos en las relaciones.
+
             System.out.println("🚀 Servidor MadriLink iniciado correctamente.");
             System.out.println("📦 Los datos iniciales se están cargando desde import.sql...");
         };

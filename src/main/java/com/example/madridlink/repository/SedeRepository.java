@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface SedeRepository extends JpaRepository<Sede, Long> {
 
-    List<Sede> findByNombreContaining(String nombre);
+    List<Sede> findByNombreContainingIgnoreCase(String nombre);
 }
