@@ -65,13 +65,13 @@
                 <small class="badge-sede" th:if="${t.sede != null}" th:text="${t.sede?.nombre}">Nombre de la Sede</small>
             </div>
 
-            <span th:if="${t.completado}" style="color: green; font-weight: bold;">✅ Finalizado</span>
-            <span th:unless="${t.completado}" style="color: #d32f2f; font-size: 0.8em; font-weight: bold;">⏳ PENDIENTE</span>
+            <span th:if="${t.progresoCalculado == 100}" style="color: green; font-weight: bold;">✅ Finalizado</span>
+            <span th:unless="${t.progresoCalculado == 100}" style="color: #d32f2f; font-size: 0.8em; font-weight: bold;" th:text="${t.progresoCalculado} + '%'">⏳ PENDIENTE</span>
         </div>
 
         <div class="progress-container">
             <div class="progress-bar"
-                 th:style="'width: ' + (${t.completado} ? '100%' : '40%')">
+                 th:style="'width: ' + ${t.progresoCalculado} + '%'">
             </div>
         </div>
 

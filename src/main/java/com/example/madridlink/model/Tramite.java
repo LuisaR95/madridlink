@@ -18,23 +18,29 @@ public class Tramite {
     private String ubicacion;
     private String urlCita;
 
-    // 1. Relación con Documentos (YA LA TENÍAS)
-    @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Documento> documentos;
 
-    // 2. NUEVA: Relación con la Sede (Muchos trámites pertenecen a una Sede)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sede_id")
     private Sede sede;
 
-    // 3. NUEVA: Relación con Consejos (Un trámite tiene muchos consejos)
     @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL)
     private List<Consejo> consejos;
 
     public Tramite() {
     }
 
-    // --- GETTERS Y SETTERS ---
+    // --- NUEVO MÉTODO PARA LA BARRA (Añadido aquí) ---
+    public int getProgresoCalculado() {
+        if (documentos == null || documentos.isEmpty()) {
+            return completado ? 100 : 0;
+        }
+        long marcados = documentos.stream().filter(Documento::isMarcado).count();
+        return (int) ((marcados * 100) / documentos.size());
+    }
+
+    // --- TUS GETTERS Y SETTERS ORIGINALES ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -59,7 +65,6 @@ public class Tramite {
     public String getUrlCita() { return urlCita; }
     public void setUrlCita(String urlCita) { this.urlCita = urlCita; }
 
-    // GETTERS Y SETTERS DE LAS NUEVAS RELACIONES
     public Sede getSede() { return sede; }
     public void setSede(Sede sede) { this.sede = sede; }
 

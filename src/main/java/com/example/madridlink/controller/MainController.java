@@ -45,33 +45,13 @@ public class MainController {
     @PostMapping("/documento/marcar/{id}")
     public String marcarDocumento(@PathVariable Long id) {
         Documento doc = documentoRepository.findById(id).orElse(null);
-        if (doc != null) {
+        if (doc != null && doc.getTramite() != null) { // <-- Añadimos este check extra
             doc.setMarcado(!doc.isMarcado());
             documentoRepository.save(doc);
             return "redirect:/tramite/" + doc.getTramite().getId() + "#lista-documentos";
         }
         return "redirect:/";
     }
-
-    @GetMapping("/sedes/buscar")
-    public String buscarSedes(@RequestParam(name = "q", required = false) String query, Model model) {
-        if (query != null && !query.isEmpty()) {
-            model.addAttribute("sedes", sedeRepository.findByNombreContaining(query));
-        } else {
-            model.addAttribute("sedes", sedeRepository.findAll());
-        }
-        return "sedes";
-    }
-
-    @GetMapping("/comunidad")
-    public String comunidad(Model model) {
-        model.addAttribute("consejos", consejoRepository.findAll());
-        model.addAttribute("nuevoConsejo", new Consejo());
-        // Añadimos esto para que el desplegable tenga opciones:
-        model.addAttribute("todosLosTramites", tramiteRepository.findAll());
-        return "comunidad";
-    }
-
     @PostMapping("/comunidad/publicar")
     public String publicarConsejo(@ModelAttribute Consejo consejo) {
         consejoRepository.save(consejo);
