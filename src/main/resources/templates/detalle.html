@@ -27,12 +27,12 @@
 
         /* Guía y Tasas */
         .steps-box { background: #fff; border: 2px solid var(--primary-light); padding: 25px; border-radius: 16px; margin-bottom: 30px; }
-        .btn-link-oficial { background: var(--primary); color: white; text-decoration: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-link-oficial { background: var(--primary); color: white; text-decoration: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 10px; justify-content: center; width: 100%; box-sizing: border-box; }
 
         .details-tasas { background: #fef9c3; border: 1px solid #fde047; border-radius: 12px; padding: 12px; cursor: pointer; margin-top: 10px; }
         .summary-tasas { font-weight: bold; color: #854d0e; outline: none; list-style: none; }
 
-        /* SEDE RECOMENDADA (RECUPERADA) */
+        /* SEDE RECOMENDADA */
         .sede-highlight {
             background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
             color: white; padding: 25px; border-radius: 16px; margin-bottom: 30px;
@@ -46,7 +46,7 @@
         .btn-pendiente { background: #f1f5f9; color: #475569; }
         .btn-listo { background: var(--success); color: white; }
 
-        /* CONSEJOS (RECUPERADOS) */
+        /* CONSEJOS */
         .consejos-section { margin-top: 40px; }
         .section-title { font-size: 1.25rem; margin-bottom: 20px; font-weight: 700; color: #111827; }
         .consejo-bubble {
@@ -57,6 +57,9 @@
         .consejo-author { font-size: 0.85rem; font-weight: 800; color: var(--primary); }
 
         .btn-back { display: inline-block; margin-top: 40px; text-decoration: none; color: var(--secondary); font-weight: 600; }
+
+        .step-item { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #fef08a; }
+        .step-item:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
@@ -81,17 +84,34 @@
     <div class="steps-box">
         <h3 style="margin-top:0; color: var(--primary);">🚀 Guía de Gestión</h3>
         <div style="display: flex; flex-direction: column; gap: 10px;">
-            <a th:href="${tramite.urlCita}" target="_blank" class="btn-link-oficial">🔗 Abrir Sede Electrónica (Cita)</a>
-            <details class="details-tasas">
-                <summary class="summary-tasas">💳 Paso a paso: Pago de Tasas (Modelo 790) ▼</summary>
+            <a th:href="${tramite.urlCita}" target="_blank" class="btn-link-oficial">📅 Reservar Cita Previa (Sede Oficial)</a>
+
+            <details class="details-tasas" open th:if="${#strings.contains(tramite.titulo, 'NIE')}">
+                <summary class="summary-tasas">💳 Guía Paso a Paso: Modelos y Tasas ▼</summary>
                 <div style="margin-top: 15px; padding: 20px; background: white; border-radius: 10px; font-size: 0.95rem; border-left: 5px solid #fde047;">
-                    <ul style="padding-left: 20px; line-height: 1.8;">
-                        <li><strong>1. Descarga:</strong> Usa el enlace de abajo.</li>
-                        <li><strong>2. Pago:</strong> En el banco antes de la cita.</li>
-                    </ul>
-                    <div style="text-align: center; background: #eff6ff; padding: 15px; border-radius: 8px; border: 1px dashed #3b82f6;">
-                        <a href="https://sede.policia.gob.es/portal74/pago_tasas.html" target="_blank" style="color: #2563eb; font-weight: 800; text-decoration: underline;">Descargar Modelo 790 Oficial aquí</a>
+
+                    <div class="step-item">
+                        <strong>Paso 1: Descargar Formulario de Solicitud (EX-15)</strong><br>
+                        Es el documento principal que debes entregar rellenado.<br>
+                        <a href="https://www.inclusion.gob.es/documents/410168/413157/15-Formulario_EX-15.pdf" target="_blank" style="color: #2563eb; font-weight: bold;">📥 Descargar Modelo EX-15 Oficial</a>
                     </div>
+
+                    <div class="step-item">
+                        <strong>Paso 2: Rellenar el Pago de Tasas (Modelo 790-012)</strong><br>
+                        Rellena los datos en el enlace oficial para generar el PDF de pago.<br>
+                        <a href="https://sede.policia.gob.es/portal74/pago_tasas.html" target="_blank" style="color: #2563eb; font-weight: bold;">💸 Generar Modelo 790 aquí</a>
+                    </div>
+
+                    <div class="step-item">
+                        <strong>Paso 3: Pago en el Banco</strong><br>
+                        Lleva el Modelo 790 impreso a cualquier banco o cajero y paga la tasa antes de ir a tu cita.
+                    </div>
+
+                    <div class="step-item">
+                        <strong>Paso 4: Preparar Carpeta de Documentos</strong><br>
+                        Revisa la lista de abajo y asegúrate de llevar originales y copias.
+                    </div>
+
                 </div>
             </details>
         </div>
