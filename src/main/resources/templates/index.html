@@ -2,72 +2,133 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>MadriLink - Mi Panel de Trámites</title>
+    <title>MadriLink - Inicio</title>
     <style>
-        :root { --primary: #1e3a8a; --bg: #f8fafc; --white: #ffffff; --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #334155; margin: 0; padding: 40px 20px; }
-        .container { max-width: 900px; margin: auto; }
-
-        .nav-header {
-            display: flex; justify-content: space-between; align-items: center;
-            background: var(--white); padding: 20px 30px; border-radius: 16px;
-            box-shadow: var(--shadow); margin-bottom: 30px;
+        :root {
+            --primary: #1e3a8a;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --text-main: #1e293b;
+            --text-sec: #64748b;
         }
-        .logo { color: var(--primary); font-weight: 800; font-size: 1.5rem; margin: 0; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            margin: 0; padding: 20px;
+        }
+
+        .container { max-width: 800px; margin: 40px auto; }
+
+        /* Cabecera y Navegación */
+        .header-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .header-main h1 { color: var(--primary); margin: 0; font-weight: 800; font-size: 2.2rem; }
 
         .nav-buttons { display: flex; gap: 10px; }
         .btn-nav {
-            text-decoration: none; padding: 10px 20px; border-radius: 10px;
-            font-weight: 600; font-size: 0.9rem; transition: 0.2s;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
         }
-        .btn-blue { background: var(--primary); color: white; }
-        .btn-light { background: #f1f5f9; color: #475569; }
+        .btn-secondary { background: #e2e8f0; color: #475569; }
+        .btn-secondary:hover { background: #cbd5e1; }
 
+        /* Diseño Horizontal de la Tarjeta */
         .tramite-card {
-            background: var(--white); border-radius: 16px; padding: 25px;
-            margin-bottom: 20px; box-shadow: var(--shadow); border: 1px solid #e2e8f0;
-            display: grid; grid-template-columns: 1fr auto; align-items: center; transition: 0.2s;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f1f5f9;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
-        .tramite-card:hover { transform: translateY(-3px); border-color: var(--primary); }
 
-        .status-pill {
-            padding: 4px 12px; border-radius: 99px; font-size: 0.75rem;
-            font-weight: 700; text-transform: uppercase;
+        .card-content h3 { margin: 0; color: var(--primary); font-size: 1.5rem; }
+        .card-content p { color: var(--text-sec); margin: 8px 0 0 0; line-height: 1.5; }
+
+        /* BARRA DE PROGRESO */
+        .progress-section { width: 100%; }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .status-done { background: #dcfce7; color: #166534; }
-        .status-pending { background: #fee2e2; color: #991b1b; }
+        .progress-bg {
+            background-color: #f1f5f9;
+            border-radius: 50px;
+            height: 14px;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+            height: 100%;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
         .btn-manage {
-            color: var(--primary); text-decoration: none; font-weight: 700;
-            font-size: 0.9rem; display: flex; align-items: center; gap: 5px;
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: transform 0.2s;
         }
+        .btn-manage:hover { transform: scale(1.02); background: #1e40af; }
     </style>
 </head>
 <body>
+
 <div class="container">
-    <header class="nav-header">
-        <h1 class="logo">📍 MadriLink</h1>
+    <header class="header-main">
+        <h1>MadriLink</h1>
         <nav class="nav-buttons">
-            <a href="/sedes/buscar" class="btn-nav btn-light">🔍 Buscar Oficinas</a>
-            <a href="/comunidad" class="btn-nav btn-blue">👥 Comunidad</a>
+            <a href="/sedes/buscar" class="btn-nav btn-secondary">📍 Buscar Sedes</a>
+            <a href="/comunidad" class="btn-nav btn-secondary">💬 Comunidad</a>
         </nav>
     </header>
 
-    <h2 style="margin-bottom: 25px;">Mis Gestiones</h2>
-
-    <div th:each="t : ${tramites}" class="tramite-card">
-        <div>
-            <h3 th:text="${t.titulo}" style="margin: 0 0 5px 0;">Título</h3>
-            <span class="status-pill"
-                  th:classappend="${t.progresoCalculado == 100} ? 'status-done' : 'status-pending'"
-                  th:text="${t.progresoCalculado == 100 ? 'Completado' : 'En curso (' + t.progresoCalculado + '%)'}">
-                </span>
-            <p style="font-size: 0.85rem; color: #64748b; margin: 10px 0 0 0;">
-                📍 <span th:text="${t.ubicacion}">Ubicación</span> • ⏳ <span th:text="${t.plazo}">Plazo</span>
-            </p>
+    <div th:each="tramite : ${tramites}" class="tramite-card">
+        <div class="card-content">
+            <h3 th:text="${tramite.titulo}">Nombre del Trámite</h3>
+            <p th:text="${tramite.descripcion}">Breve explicación del trámite para el usuario.</p>
         </div>
-        <a th:href="@{/tramite/{id}(id=${t.id})}" class="btn-manage">Ver Detalles →</a>
+
+        <div class="progress-section">
+            <div class="progress-label">
+                <span>Tu progreso</span>
+                <span th:text="${tramite.getProgresoCalculado()} + '%'">0%</span>
+            </div>
+            <div class="progress-bg">
+                <div class="progress-fill" th:style="'width: ' + ${tramite.getProgresoCalculado()} + '%'"></div>
+            </div>
+        </div>
+
+        <a th:href="@{/tramite/{id}(id=${tramite.id})}" class="btn-manage">
+            Gestionar Documentos →
+        </a>
     </div>
 </div>
+
 </body>
 </html>

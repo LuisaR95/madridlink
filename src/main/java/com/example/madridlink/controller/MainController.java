@@ -51,7 +51,7 @@ public class MainController {
         if (doc != null && doc.getTramite() != null) {
             doc.setMarcado(!doc.isMarcado());
             documentoRepository.save(doc);
-            return "redirect:/tramite/" + doc.getTramite().getId() + "#lista-documentos";
+            return "redirect:/tramite/" + doc.getTramite().getId() + "#seccion-lista";
         }
         return "redirect:/";
     }
