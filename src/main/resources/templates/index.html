@@ -1,134 +1,130 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>MadriLink - Inicio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MadriLink | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary: #1e3a8a;
-            --bg: #f8fafc;
-            --white: #ffffff;
-            --text-main: #1e293b;
-            --text-sec: #64748b;
-        }
-
-        body {
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--bg);
-            margin: 0; padding: 20px;
-        }
-
-        .container { max-width: 800px; margin: 40px auto; }
-
-        /* Cabecera y Navegación */
-        .header-main {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        .header-main h1 { color: var(--primary); margin: 0; font-weight: 800; font-size: 2.2rem; }
-
-        .nav-buttons { display: flex; gap: 10px; }
-        .btn-nav {
-            text-decoration: none;
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-        .btn-secondary { background: #e2e8f0; color: #475569; }
-        .btn-secondary:hover { background: #cbd5e1; }
-
-        /* Diseño Horizontal de la Tarjeta */
-        .tramite-card {
-            background: var(--white);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            border: 1px solid #f1f5f9;
-            margin-bottom: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .card-content h3 { margin: 0; color: var(--primary); font-size: 1.5rem; }
-        .card-content p { color: var(--text-sec); margin: 8px 0 0 0; line-height: 1.5; }
-
-        /* BARRA DE PROGRESO */
-        .progress-section { width: 100%; }
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .progress-bg {
-            background-color: #f1f5f9;
-            border-radius: 50px;
-            height: 14px;
-            width: 100%;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
-        .progress-fill {
-            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
-            height: 100%;
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .btn-manage {
-            align-self: flex-end;
-            background: var(--primary);
-            color: white;
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            transition: transform 0.2s;
-        }
-        .btn-manage:hover { transform: scale(1.02); background: #1e40af; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        :root { --primary: #1e3a8a; --bg: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); }
+        .nav-link-active { border-bottom: 2px solid var(--primary); color: var(--primary); }
     </style>
 </head>
-<body>
+<body class="text-slate-900 min-h-screen">
 
-<div class="container">
-    <header class="header-main">
-        <h1>MadriLink</h1>
-        <nav class="nav-buttons">
-            <a href="/sedes/buscar" class="btn-nav btn-secondary">📍 Buscar Sedes</a>
-            <a href="/comunidad" class="btn-nav btn-secondary">💬 Comunidad</a>
-        </nav>
-    </header>
-
-    <div th:each="tramite : ${tramites}" class="tramite-card">
-        <div class="card-content">
-            <h3 th:text="${tramite.titulo}">Nombre del Trámite</h3>
-            <p th:text="${tramite.descripcion}">Breve explicación del trámite para el usuario.</p>
-        </div>
-
-        <div class="progress-section">
-            <div class="progress-label">
-                <span>Tu progreso</span>
-                <span th:text="${tramite.getProgresoCalculado()} + '%'">0%</span>
+<nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <div class="bg-[#1e3a8a] p-2 rounded-lg">
+                        <i class="fas fa-link text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-slate-800">Madri<span class="text-[#1e3a8a]">Link</span></span>
+                </div>
+                <div class="hidden sm:ml-8 sm:flex sm:space-x-8 h-full">
+                    <a th:href="@{/}" class="nav-link-active inline-flex items-center px-1 pt-1 text-sm font-medium">Dashboard</a>
+                    <a th:href="@{/tramite/1}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Trámites</a>
+                    <a th:href="@{/sedes/buscar}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Directorio</a>
+                    <a th:href="@{/comunidad}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Comunidad</a>
+                </div>
             </div>
-            <div class="progress-bg">
-                <div class="progress-fill" th:style="'width: ' + ${tramite.getProgresoCalculado()} + '%'"></div>
+            <div class="flex items-center">
+                <img src="https://ui-avatars.com/api/?name=Usuario&background=1e3a8a&color=fff" class="h-8 w-8 rounded-full border border-slate-200">
             </div>
         </div>
-
-        <a th:href="@{/tramite/{id}(id=${tramite.id})}" class="btn-manage">
-            Gestionar Documentos →
-        </a>
     </div>
-</div>
+</nav>
 
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="mb-8 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-900">Bienvenida a Madrid 👋</h1>
+                <p class="text-slate-500 font-medium text-sm">Estado global de tus gestiones:</p>
+            </div>
+            <div class="bg-blue-50 px-6 py-2 rounded-2xl text-center">
+                <span class="text-3xl font-black text-[#1e3a8a]" th:text="${progresoGlobal} + '%'">0%</span>
+                <span class="text-[10px] font-bold text-[#1e3a8a] block uppercase tracking-wider">Completado</span>
+            </div>
+        </div>
+        <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+            <div class="bg-[#1e3a8a] h-full transition-all duration-1000"
+                 th:style="'width:' + ${progresoGlobal} + '%'"></div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div class="md:col-span-2 space-y-4">
+            <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <i class="fas fa-tasks text-[#1e3a8a]"></i> Mis Trámites Activos
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div th:each="tramite : ${tramites}" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-[10px] font-bold uppercase px-2 py-1 bg-blue-50 text-[#1e3a8a] rounded-md" th:text="${tramite.plazo}">Plazo</span>
+                        <i class="fas fa-chevron-right text-slate-300"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-900 mb-1" th:text="${tramite.titulo}">Nombre Trámite</h4>
+                    <p class="text-xs text-slate-500 mb-4 line-clamp-2" th:text="${tramite.descripcion}">Descripción...</p>
+
+                    <div class="mb-4" th:with="total=${tramite.documentos.size()}, listos=${#lists.size(tramite.documentos.?[marcado])}">
+                        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-[#1e3a8a] h-full" th:style="'width:' + ${total > 0 ? (listos * 100 / total) : 0} + '%'"></div>
+                        </div>
+                    </div>
+
+                    <a th:href="@{/tramite/{id}(id=${tramite.id})}" class="inline-block w-full text-center py-2 bg-slate-100 text-slate-700 text-sm font-bold rounded-lg hover:bg-[#1e3a8a] hover:text-white transition-colors">
+                        Gestionar Documentos
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-[#1e3a8a] p-6 rounded-2xl text-white shadow-lg shadow-blue-900/20">
+                <h3 class="font-bold text-lg mb-2">¿Necesitas ayuda?</h3>
+                <p class="text-blue-100 text-sm mb-4">Consulta los consejos de otros estudiantes en la comunidad.</p>
+                <a th:href="@{/comunidad}" class="block text-center py-2 bg-white text-[#1e3a8a] font-bold rounded-lg text-sm">
+                    Ver Comunidad
+                </a>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="font-bold text-slate-800 mb-4">Sedes Recomendadas</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-xl transition-colors">
+                        <div class="p-2 bg-blue-50 rounded-lg text-[#1e3a8a]">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">Oficina Pradillo</p>
+                            <p class="text-[10px] text-slate-500 uppercase tracking-tight">Calle de Pradillo, 40</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-xl transition-colors">
+                        <div class="p-2 bg-green-50 rounded-lg text-green-600">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">Comisaría Aluche</p>
+                            <p class="text-[10px] text-slate-500 uppercase tracking-tight">Av. de los Poblados, s/n</p>
+                        </div>
+                    </div>
+                </div>
+                <a th:href="@{/sedes/buscar}" class="block mt-6 text-center text-sm font-bold text-[#1e3a8a] hover:underline">
+                    Ver directorio completo →
+                </a>
+            </div>
+        </div>
+
+    </div>
+</main>
 </body>
 </html>

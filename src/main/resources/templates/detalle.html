@@ -2,154 +2,123 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MadriLink - Gestión de Trámite</title>
+    <title>MadriLink - Detalle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #1e3a8a;
-            --primary-light: #dbeafe;
-            --secondary: #64748b;
-            --success: #10b981;
-            --bg: #f8fafc;
-            --white: #ffffff;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        body { font-family: 'Inter', 'Segoe UI', sans-serif; background-color: var(--bg); color: #1f2937; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 40px auto; background: var(--white); padding: 40px; border-radius: 20px; box-shadow: var(--shadow); }
-
-        .header-section { border-bottom: 2px solid #f1f5f9; margin-bottom: 30px; padding-bottom: 20px; }
-        h1 { color: var(--primary); font-size: 2rem; margin: 0; font-weight: 800; }
-
-        .grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .info-card { background: #fff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; }
-        .info-card h3 { margin: 0 0 8px 0; font-size: 0.85rem; text-transform: uppercase; color: var(--secondary); }
-
-        /* Guía y Tasas */
-        .steps-box { background: #fff; border: 2px solid var(--primary-light); padding: 25px; border-radius: 16px; margin-bottom: 30px; }
-        .btn-link-oficial { background: var(--primary); color: white; text-decoration: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 10px; justify-content: center; width: 100%; box-sizing: border-box; }
-
-        .details-tasas { background: #fef9c3; border: 1px solid #fde047; border-radius: 12px; padding: 12px; cursor: pointer; margin-top: 10px; }
-        .summary-tasas { font-weight: bold; color: #854d0e; outline: none; list-style: none; }
-
-        /* SEDE RECOMENDADA */
-        .sede-highlight {
-            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-            color: white; padding: 25px; border-radius: 16px; margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
-
-        /* DOCUMENTOS */
-        .doc-list { border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-top: 20px; }
-        .doc-item { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; border-bottom: 1px solid #f1f5f9; }
-        .btn-check { padding: 10px 22px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; }
-        .btn-pendiente { background: #f1f5f9; color: #475569; }
-        .btn-listo { background: var(--success); color: white; }
-
-        /* CONSEJOS */
-        .consejos-section { margin-top: 40px; }
-        .section-title { font-size: 1.25rem; margin-bottom: 20px; font-weight: 700; color: #111827; }
-        .consejo-bubble {
-            background: #f8fafc; border-left: 5px solid var(--primary);
-            padding: 20px; border-radius: 4px 16px 16px 4px; margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-        .consejo-author { font-size: 0.85rem; font-weight: 800; color: var(--primary); }
-
-        .btn-back { display: inline-block; margin-top: 40px; text-decoration: none; color: var(--secondary); font-weight: 600; }
-
-        .step-item { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #fef08a; }
-        .step-item:last-child { border-bottom: none; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .card-compact { transition: all 0.2s ease; }
+        .card-compact:hover { border-color: #1e3a8a; transform: translateY(-1px); }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-900">
 
-<div class="container">
-    <div class="header-section">
-        <h1 th:text="${tramite.titulo}">Nombre del Trámite</h1>
-        <p th:text="${tramite.descripcion}" style="color: var(--secondary);"></p>
-    </div>
+<div class="max-w-5xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    <div class="grid-info">
-        <div class="info-card">
-            <h3>⏳ Plazo Legal</h3>
-            <p th:text="${tramite.plazo}">30 días</p>
+    <aside class="lg:col-span-3 space-y-2">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-2 mb-4">Todos los trámites</h3>
+
+        <div th:each="t : ${allTramites}">
+            <a th:href="@{/tramite/{id}(id=${t.id})}"
+               th:class="${t.id == tramite.id} ? 'flex items-center gap-3 p-3 rounded-xl bg-blue-50 text-[#1e3a8a] font-bold border border-blue-100 mb-1' : 'flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm text-slate-500 font-medium transition-all mb-1'">
+                <i class="fas fa-file-alt text-sm"></i>
+                <span class="text-sm" th:text="${t.titulo}">Trámite</span>
+            </a>
         </div>
-        <div class="info-card">
-            <h3>📍 Ubicación</h3>
-            <p th:text="${tramite.ubicacion}">Madrid</p>
-        </div>
-    </div>
 
-    <div class="steps-box">
-        <h3 style="margin-top:0; color: var(--primary);">🚀 Guía de Gestión</h3>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <a th:href="${tramite.urlCita}" target="_blank" class="btn-link-oficial">📅 Reservar Cita Previa (Sede Oficial)</a>
+        <hr class="border-slate-200 my-4">
+        <a th:href="@{/}" class="flex items-center gap-3 p-3 text-slate-400 text-sm font-medium hover:text-slate-600">
+            <i class="fas fa-home"></i> Inicio Dashboard
+        </a>
+    </aside>
 
-            <details class="details-tasas" open th:if="${#strings.contains(tramite.titulo, 'NIE')}">
-                <summary class="summary-tasas">💳 Guía Paso a Paso: Modelos y Tasas ▼</summary>
-                <div style="margin-top: 15px; padding: 20px; background: white; border-radius: 10px; font-size: 0.95rem; border-left: 5px solid #fde047;">
+    <main class="lg:col-span-6 space-y-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex justify-between items-start mb-4">
+                <h1 class="text-xl font-extrabold text-slate-800" th:text="${tramite.titulo}">Nombre</h1>
+                <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded font-bold" th:text="${tramite.plazo}">Plazo</span>
+            </div>
 
-                    <div class="step-item">
-                        <strong>Paso 1: Descargar Formulario de Solicitud (EX-15)</strong><br>
-                        Es el documento principal que debes entregar rellenado.<br>
-                        <a href="https://www.inclusion.gob.es/documents/410168/413157/15-Formulario_EX-15.pdf" target="_blank" style="color: #2563eb; font-weight: bold;">📥 Descargar Modelo EX-15 Oficial</a>
-                    </div>
+            <p class="text-sm text-slate-500 mb-4" th:text="${tramite.descripcion}">Descripción</p>
 
-                    <div class="step-item">
-                        <strong>Paso 2: Rellenar el Pago de Tasas (Modelo 790-012)</strong><br>
-                        Rellena los datos en el enlace oficial para generar el PDF de pago.<br>
-                        <a href="https://sede.policia.gob.es/portal74/pago_tasas.html" target="_blank" style="color: #2563eb; font-weight: bold;">💸 Generar Modelo 790 aquí</a>
-                    </div>
+            <div th:if="${tramite.sede != null}" class="mb-6 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Sede Recomendada</h4>
+                <p class="text-sm font-bold text-slate-700" th:text="${tramite.sede.nombre}">Nombre Sede</p>
+                <p class="text-xs text-slate-500" th:text="${tramite.sede.direccion}">Dirección</p>
+            </div>
 
-                    <div class="step-item">
-                        <strong>Paso 3: Pago en el Banco</strong><br>
-                        Lleva el Modelo 790 impreso a cualquier banco o cajero y paga la tasa antes de ir a tu cita.
-                    </div>
-
-                    <div class="step-item">
-                        <strong>Paso 4: Preparar Carpeta de Documentos</strong><br>
-                        Revisa la lista de abajo y asegúrate de llevar originales y copias.
-                    </div>
-
+            <div class="space-y-2" th:with="total=${#lists.size(documentos)}, marcados=${#lists.size(documentos.?[marcado])}">
+                <div class="flex justify-between text-[10px] font-bold">
+                    <span class="text-slate-400 uppercase">Progreso de requisitos</span>
+                    <span class="text-[#1e3a8a]" th:text="${total > 0 ? (marcados * 100 / total) + '%' : '0%'}">0%</span>
                 </div>
-            </details>
-        </div>
-    </div>
-
-    <div class="sede-highlight" th:if="${tramite.sede != null}">
-        <h3 style="margin:0; font-size: 1rem; opacity: 0.9;">🏢 Oficina Recomendada</h3>
-        <p style="font-size: 1.2rem; margin: 5px 0 0 0;"><strong th:text="${tramite.sede.nombre}">Nombre de la Sede</strong></p>
-        <p style="margin: 5px 0 0 0; opacity: 0.9;">📍 <span th:text="${tramite.sede.direccion}">Dirección de la oficina</span></p>
-    </div>
-
-    <div class="seccion-docs">
-        <h3 id="seccion-lista" class="section-title">📋 Lista de Verificación</h3>
-        <div class="doc-list">
-            <div th:each="doc : ${documentos}" class="doc-item">
-                <div class="doc-info">
-                    <strong th:text="${doc.nombre}"></strong>
-                    <span th:text="${doc.tipo} + ' • ' + ${doc.costo}" style="font-size: 0.85rem; color: var(--secondary);"></span>
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-[#1e3a8a] h-full transition-all duration-700" th:style="'width:' + ${total > 0 ? (marcados * 100 / total) : 0} + '%'"></div>
                 </div>
-                <form th:action="@{/documento/marcar/{id}(id=${doc.id})}" method="post">
-                    <button type="submit"
-                            th:class="${doc.marcado} ? 'btn-check btn-listo' : 'btn-check btn-pendiente'"
-                            th:text="${doc.marcado ? '✅ Completado' : '⏳ Marcar'}">
-                    </button>
-                </form>
             </div>
         </div>
-    </div>
 
-    <div class="consejos-section">
-        <h3 class="section-title">💬 Comunidad y Consejos</h3>
-        <div th:each="c : ${tramite.consejos}" class="consejo-bubble">
-            <p th:text="${c.contenido}" style="margin: 0 0 10px 0; font-style: italic;"></p>
-            <span class="consejo-author" th:text="'— ' + ${c.autor}">Autor</span>
+        <div th:if="${tramite.titulo.contains('NIE')}" class="bg-[#1e3a8a] text-white p-5 rounded-2xl shadow-md relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 class="font-bold text-sm mb-2 flex items-center gap-2">
+                    <i class="fas fa-file-signature"></i> Gestión de EX-15 y Tasas
+                </h3>
+                <p class="text-xs text-blue-100 leading-relaxed mb-4">
+                    Para este trámite es obligatorio presentar el <strong>Modelo EX-15</strong> por duplicado y el justificante de la <strong>Tasa 790-012</strong> pagada.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <a href="https://www.inclusion.gob.es/documents/410168/413157/15-Formulario_EX-15.pdf" target="_blank"
+                       class="text-[10px] bg-white text-[#1e3a8a] px-3 py-2 rounded-lg font-bold hover:bg-blue-50 transition-all flex items-center gap-2">
+                        <i class="fas fa-download"></i> Descargar EX-15
+                    </a>
+                    <a href="https://sede.policia.gob.es/portal74/pago_tasas.html" target="_blank"
+                       class="text-[10px] bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg font-bold transition-all flex items-center gap-2">
+                        <i class="fas fa-credit-card"></i> Pagar Tasa 790
+                    </a>
+                </div>
+            </div>
+            <i class="fas fa-university absolute -right-4 -bottom-4 text-white/10 text-6xl"></i>
         </div>
-    </div>
 
-    <a href="/" class="btn-back">← Volver al Listado General</a>
+        <div class="space-y-3">
+            <h3 class="text-sm font-bold text-slate-800 px-1">Requisitos necesarios</h3>
+            <div th:each="doc : ${documentos}" class="card-compact bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-4">
+                    <form th:action="@{/documento/marcar/{id}(id=${doc.id})}" method="post">
+                        <button type="submit"
+                                th:class="${doc.marcado} ? 'w-6 h-6 rounded-md bg-green-500 text-white flex items-center justify-center' : 'w-6 h-6 rounded-md border-2 border-slate-200 hover:border-[#1e3a8a] transition-colors'">
+                            <i class="fas fa-check text-[10px]" th:if="${doc.marcado}"></i>
+                        </button>
+                    </form>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-700" th:text="${doc.nombre}">Nombre</p>
+                        <p class="text-[10px] text-slate-400" th:text="${doc.descripcion}">Detalle</p>
+                    </div>
+                </div>
+                <span class="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded border border-slate-100" th:text="${doc.costo}">Gratis</span>
+            </div>
+        </div>
+    </main>
+
+    <aside class="lg:col-span-3 space-y-6">
+        <a th:href="${tramite.urlCita}" target="_blank" class="block w-full bg-[#1e3a8a] text-white text-center py-4 rounded-2xl font-bold shadow-lg shadow-blue-900/20 hover:bg-blue-800 transition-all">
+            <i class="fas fa-calendar-alt mr-2"></i> Pedir Cita Previa
+        </a>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <h3 class="text-xs font-bold text-slate-800 uppercase mb-4 tracking-wider">Tips de la comunidad</h3>
+            <div class="space-y-4">
+                <div th:each="c : ${tramite.consejos}" class="relative pl-4 border-l-2 border-blue-200">
+                    <p class="text-xs text-slate-600 italic" th:text="'&quot;' + ${c.contenido} + '&quot;'"></p>
+                    <p class="text-[9px] font-bold text-[#1e3a8a] mt-1" th:text="${c.autor}"></p>
+                </div>
+                <div th:if="${#lists.isEmpty(tramite.consejos)}" class="text-center py-4">
+                    <p class="text-[10px] text-slate-400 italic">No hay consejos específicos aún.</p>
+                </div>
+            </div>
+        </div>
+    </aside>
 </div>
 
 </body>

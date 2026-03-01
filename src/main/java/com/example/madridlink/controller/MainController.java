@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 public class MainController {
 
@@ -30,7 +32,21 @@ public class MainController {
     // --- PÁGINA DE INICIO ---
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("tramites", tramiteRepository.findAll());
+        List<Tramite> tramites = tramiteRepository.findAll();
+
+        // Calculamos el progreso general aquí (Lógica Java, segura y rápida)
+        long totalDocs = 0;
+        long totalListos = 0;
+
+        for (Tramite t : tramites) {
+            totalDocs += t.getDocumentos().size();
+            totalListos += t.getDocumentos().stream().filter(doc -> doc.isMarcado()).count();
+        }
+
+        int porcentajeGlobal = (totalDocs > 0) ? (int) (totalListos * 100 / totalDocs) : 0;
+
+        model.addAttribute("tramites", tramites);
+        model.addAttribute("progresoGlobal", porcentajeGlobal); // <--- Enviamos el número listo
         return "index";
     }
 
@@ -41,6 +57,8 @@ public class MainController {
         if (tramite == null) return "redirect:/";
         model.addAttribute("tramite", tramite);
         model.addAttribute("documentos", tramite.getDocumentos());
+        model.addAttribute("allTramites", tramiteRepository.findAll());
+
         return "detalle";
     }
 
