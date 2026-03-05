@@ -29,12 +29,9 @@ public class MainController {
     @Autowired
     private ConsejoRepository consejoRepository;
 
-    // --- PÁGINA DE INICIO ---
     @GetMapping("/")
     public String index(Model model) {
         List<Tramite> tramites = tramiteRepository.findAll();
-
-        // Calculamos el progreso general aquí (Lógica Java, segura y rápida)
         long totalDocs = 0;
         long totalListos = 0;
 
@@ -46,11 +43,10 @@ public class MainController {
         int porcentajeGlobal = (totalDocs > 0) ? (int) (totalListos * 100 / totalDocs) : 0;
 
         model.addAttribute("tramites", tramites);
-        model.addAttribute("progresoGlobal", porcentajeGlobal); // <--- Enviamos el número listo
+        model.addAttribute("progresoGlobal", porcentajeGlobal);
         return "index";
     }
 
-    // --- DETALLE DEL TRÁMITE ---
     @GetMapping("/tramite/{id}")
     public String verDetalles(@PathVariable Long id, Model model) {
         Tramite tramite = tramiteRepository.findById(id).orElse(null);
@@ -58,63 +54,54 @@ public class MainController {
         model.addAttribute("tramite", tramite);
         model.addAttribute("documentos", tramite.getDocumentos());
         model.addAttribute("allTramites", tramiteRepository.findAll());
-
         return "detalle";
     }
 
-    // --- GESTIÓN DE DOCUMENTOS (CHECKBOX) ---
+    // --- CORREGIDO: Recibe el parámetro 'anchor' ---
     @PostMapping("/documento/marcar/{id}")
-    public String marcarDocumento(@PathVariable Long id) {
+    public String marcarDocumento(@PathVariable Long id, @RequestParam(name = "anchor", required = false) String anchor) {
         Documento doc = documentoRepository.findById(id).orElse(null);
         if (doc != null && doc.getTramite() != null) {
             doc.setMarcado(!doc.isMarcado());
             documentoRepository.save(doc);
-            return "redirect:/tramite/" + doc.getTramite().getId() + "#seccion-lista";
+
+            // Redirige al trámite manteniendo el ancla
+            if (anchor != null && !anchor.isEmpty()) {
+                return "redirect:/tramite/" + doc.getTramite().getId() + "#" + anchor;
+            }
+            return "redirect:/tramite/" + doc.getTramite().getId();
         }
         return "redirect:/";
     }
 
-    // Seguro para evitar Error 405 si se refresca la página
     @GetMapping("/documento/marcar/{id}")
     public String capturarErrorGet(@PathVariable Long id) {
         return "redirect:/tramite/" + id;
     }
 
-    // --- COMUNIDAD: PUBLICAR CONSEJO ---
     @PostMapping("/comunidad/publicar")
     public String publicarConsejo(@ModelAttribute Consejo consejo, @RequestParam(name = "tramiteId", required = false) Long tramiteId) {
-
-        // Buscamos el trámite para vincularlo al consejo
         if (tramiteId != null) {
             Tramite tramite = tramiteRepository.findById(tramiteId).orElse(null);
             consejo.setTramite(tramite);
-        } else if (consejo.getTramite() != null && consejo.getTramite().getId() != null) {
-            Tramite tramite = tramiteRepository.findById(consejo.getTramite().getId()).orElse(null);
-            consejo.setTramite(tramite);
         }
-
-        // Guardamos si tiene contenido
         if (consejo.getContenido() != null && !consejo.getContenido().trim().isEmpty()) {
             consejoRepository.save(consejo);
         }
-
         return "redirect:/comunidad";
     }
 
-    // --- BUSCADOR DE SEDES ---
     @GetMapping("/sedes/buscar")
     public String buscarSedes(@RequestParam(name = "q", required = false) String query, Model model) {
         if (query != null && !query.isEmpty()) {
-            // Cambiamos a findByNombreContainingIgnoreCase
             model.addAttribute("sedes", sedeRepository.findByNombreContainingIgnoreCase(query));
         } else {
             model.addAttribute("sedes", sedeRepository.findAll());
         }
-        // Guardamos la query para que el buscador no se vacíe al dar clic
         model.addAttribute("query", query);
         return "sedes";
     }
-    // --- VER COMUNIDAD ---
+
     @GetMapping("/comunidad")
     public String comunidad(Model model) {
         model.addAttribute("consejos", consejoRepository.findAll());

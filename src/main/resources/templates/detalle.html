@@ -10,6 +10,8 @@
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .card-compact { transition: all 0.2s ease; }
         .card-compact:hover { border-color: #1e3a8a; transform: translateY(-1px); }
+        /* Margen para que al hacer scroll el título no quede tapado */
+        .scroll-mt-24 { scroll-margin-top: 6rem; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -18,7 +20,6 @@
 
     <aside class="lg:col-span-3 space-y-2">
         <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-2 mb-4">Todos los trámites</h3>
-
         <div th:each="t : ${allTramites}">
             <a th:href="@{/tramite/{id}(id=${t.id})}"
                th:class="${t.id == tramite.id} ? 'flex items-center gap-3 p-3 rounded-xl bg-blue-50 text-[#1e3a8a] font-bold border border-blue-100 mb-1' : 'flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm text-slate-500 font-medium transition-all mb-1'">
@@ -26,7 +27,6 @@
                 <span class="text-sm" th:text="${t.titulo}">Trámite</span>
             </a>
         </div>
-
         <hr class="border-slate-200 my-4">
         <a th:href="@{/}" class="flex items-center gap-3 p-3 text-slate-400 text-sm font-medium hover:text-slate-600">
             <i class="fas fa-home"></i> Inicio Dashboard
@@ -39,7 +39,6 @@
                 <h1 class="text-xl font-extrabold text-slate-800" th:text="${tramite.titulo}">Nombre</h1>
                 <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded font-bold" th:text="${tramite.plazo}">Plazo</span>
             </div>
-
             <p class="text-sm text-slate-500 mb-4" th:text="${tramite.descripcion}">Descripción</p>
 
             <div th:if="${tramite.sede != null}" class="mb-6 p-4 bg-slate-50 rounded-xl border border-slate-100">
@@ -50,7 +49,7 @@
 
             <div class="space-y-2" th:with="total=${#lists.size(documentos)}, marcados=${#lists.size(documentos.?[marcado])}">
                 <div class="flex justify-between text-[10px] font-bold">
-                    <span class="text-slate-400 uppercase">Progreso de requisitos</span>
+                    <span class="text-slate-400 uppercase">Progreso</span>
                     <span class="text-[#1e3a8a]" th:text="${total > 0 ? (marcados * 100 / total) + '%' : '0%'}">0%</span>
                 </div>
                 <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
@@ -59,33 +58,71 @@
             </div>
         </div>
 
-        <div th:if="${tramite.titulo.contains('NIE')}" class="bg-[#1e3a8a] text-white p-5 rounded-2xl shadow-md relative overflow-hidden">
+        <div th:if="${tramite.id == 1}" class="bg-[#1e3a8a] text-white p-6 rounded-3xl shadow-lg relative overflow-hidden">
             <div class="relative z-10">
-                <h3 class="font-bold text-sm mb-2 flex items-center gap-2">
-                    <i class="fas fa-file-signature"></i> Gestión de EX-15 y Tasas
+                <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
+                    <i class="fas fa-exclamation-circle text-amber-400"></i> Gestión de EX-15 y Tasa 790
                 </h3>
-                <p class="text-xs text-blue-100 leading-relaxed mb-4">
-                    Para este trámite es obligatorio presentar el <strong>Modelo EX-15</strong> por duplicado y el justificante de la <strong>Tasa 790-012</strong> pagada.
-                </p>
+                <div class="space-y-3 mb-5">
+                    <p class="text-xs text-blue-100 leading-relaxed">
+                        Es obligatorio presentar el <strong>Modelo EX-15</strong> por duplicado y la <strong>Tasa 790-012</strong> pagada. Haz clic en los botones para ver las instrucciones.
+                    </p>
+                </div>
                 <div class="flex flex-wrap gap-2">
-                    <a href="https://www.inclusion.gob.es/documents/410168/413157/15-Formulario_EX-15.pdf" target="_blank"
-                       class="text-[10px] bg-white text-[#1e3a8a] px-3 py-2 rounded-lg font-bold hover:bg-blue-50 transition-all flex items-center gap-2">
-                        <i class="fas fa-download"></i> Descargar EX-15
-                    </a>
-                    <a href="https://sede.policia.gob.es/portal74/pago_tasas.html" target="_blank"
-                       class="text-[10px] bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg font-bold transition-all flex items-center gap-2">
-                        <i class="fas fa-credit-card"></i> Pagar Tasa 790
-                    </a>
+                    <button onclick="openModal('modalEX15')"
+                            class="text-[10px] bg-white text-[#1e3a8a] px-3 py-2 rounded-lg font-bold hover:bg-blue-50 transition-all">
+                        <i class="fas fa-file-pdf mr-1"></i> Ver EX-15
+                    </button>
+                    <button onclick="openModal('modalTasa')"
+                            class="text-[10px] bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg font-bold transition-all">
+                        <i class="fas fa-credit-card mr-1"></i> Ver Tasa 790
+                    </button>
                 </div>
             </div>
-            <i class="fas fa-university absolute -right-4 -bottom-4 text-white/10 text-6xl"></i>
+            <i class="fas fa-university absolute -right-4 -bottom-4 text-white/10 text-8xl rotate-12"></i>
+        </div>
+
+        <div th:if="${tramite.id == 1}" class="bg-white border-2 border-blue-50 p-6 rounded-3xl shadow-sm">
+            <h3 class="text-[#1e3a8a] font-extrabold text-sm mb-2 flex items-center gap-2">
+                <i class="fas fa-fingerprint"></i> ¿Cómo justificar tu solicitud?
+            </h3>
+            <p class="text-[11px] text-slate-500 mb-4 italic leading-relaxed">
+                El NIE no se da "porque sí"; debes demostrar por qué lo necesitas. Dependiendo de tu situación, lleva:
+            </p>
+
+            <div class="space-y-3">
+                <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="mt-1 bg-blue-100 text-blue-600 p-2 rounded-lg text-xs"><i class="fas fa-graduation-cap"></i></div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-700">Por estudios</h4>
+                        <p class="text-[10px] text-slate-500">Carta de aceptación de la universidad o centro de estudios.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="mt-1 bg-green-100 text-green-600 p-2 rounded-lg text-xs"><i class="fas fa-briefcase"></i></div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-700">Por trabajo</h4>
+                        <p class="text-[10px] text-slate-500">Pre-contrato de trabajo o oferta de empleo.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="mt-1 bg-amber-100 text-amber-600 p-2 rounded-lg text-xs"><i class="fas fa-coins"></i></div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-700">Intereses económicos</h4>
+                        <p class="text-[10px] text-slate-500 leading-tight text-pretty">Un contrato de arras si vas a comprar una casa o apertura de cuenta bancaria.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="space-y-3">
             <h3 class="text-sm font-bold text-slate-800 px-1">Requisitos necesarios</h3>
-            <div th:each="doc : ${documentos}" class="card-compact bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm">
+            <div th:each="doc : ${documentos}"
+                 th:id="'doc-' + ${doc.id}"
+                 class="card-compact bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm scroll-mt-24">
                 <div class="flex items-center gap-4">
                     <form th:action="@{/documento/marcar/{id}(id=${doc.id})}" method="post">
+                        <input type="hidden" name="anchor" th:value="'doc-' + ${doc.id}" />
                         <button type="submit"
                                 th:class="${doc.marcado} ? 'w-6 h-6 rounded-md bg-green-500 text-white flex items-center justify-center' : 'w-6 h-6 rounded-md border-2 border-slate-200 hover:border-[#1e3a8a] transition-colors'">
                             <i class="fas fa-check text-[10px]" th:if="${doc.marcado}"></i>
@@ -96,7 +133,9 @@
                         <p class="text-[10px] text-slate-400" th:text="${doc.descripcion}">Detalle</p>
                     </div>
                 </div>
-                <span class="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded border border-slate-100" th:text="${doc.costo}">Gratis</span>
+                <div class="text-right">
+                    <span class="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded border border-slate-100 block mb-1" th:text="${doc.costo}">Gratis</span>
+                </div>
             </div>
         </div>
     </main>
@@ -113,13 +152,64 @@
                     <p class="text-xs text-slate-600 italic" th:text="'&quot;' + ${c.contenido} + '&quot;'"></p>
                     <p class="text-[9px] font-bold text-[#1e3a8a] mt-1" th:text="${c.autor}"></p>
                 </div>
-                <div th:if="${#lists.isEmpty(tramite.consejos)}" class="text-center py-4">
-                    <p class="text-[10px] text-slate-400 italic">No hay consejos específicos aún.</p>
-                </div>
             </div>
         </div>
     </aside>
 </div>
+
+<div id="modalEX15" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+            <h3 class="font-extrabold text-slate-800">1. Modelo EX-15 (Solicitud de NIE)</h3>
+            <button onclick="closeModal('modalEX15')" class="text-slate-400 hover:text-slate-600 text-xl">&times;</button>
+        </div>
+        <div class="p-6 overflow-y-auto max-h-[60vh] text-sm text-slate-600 space-y-4">
+            <p>Este es el formulario donde pones tus datos personales y el motivo por el cual pides el número.</p>
+            <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                <h4 class="font-bold text-[#1e3a8a] mb-2 text-xs uppercase">Consejo:</h4>
+                <p class="text-xs">Rellénalo con mayúsculas de imprenta o directamente en el ordenador antes de imprimirlo. Marca la casilla <strong>"Asignación de NIE"</strong>.</p>
+            </div>
+            <a href="https://www.we-pdf.com/es/editor?action=form&form=ex-15" target="_blank" class="block w-full bg-[#1e3a8a] text-white text-center py-3 rounded-xl font-bold">
+                Descargar PDF Oficial (Sede Electrónica)
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="modalTasa" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+            <h3 class="font-extrabold text-slate-800">2. Tasa 790 Código 012 (Pago)</h3>
+            <button onclick="closeModal('modalTasa')" class="text-slate-400 hover:text-slate-600 text-xl">&times;</button>
+        </div>
+        <div class="p-6 overflow-y-auto max-h-[60vh] text-sm text-slate-600 space-y-4">
+            <p>Debes rellenarlo online, imprimirlo y llevarlo al banco para pagar (unos 9,84 € aprox.).</p>
+            <div class="bg-amber-50 p-4 rounded-2xl border border-amber-100">
+                <h4 class="font-bold text-amber-800 mb-2 text-xs uppercase">Cómo rellenarlo:</h4>
+                <ol class="list-decimal pl-5 space-y-2 text-xs">
+                    <li>Introduce tus datos (Pasaporte/NIE, Nombre, Domicilio).</li>
+                    <li>En "Autoliquidación", busca la sección: <strong>"Documentos de identidad y títulos..."</strong></li>
+                    <li>Marca la casilla: <strong>"Asignación de Número de Identidad de Extranjero (NIE) a instancia del interesado"</strong>.</li>
+                    <li>Selecciona "En efectivo" e imprime el PDF generado.</li>
+                </ol>
+            </div>
+            <a href="https://sede.policia.gob.es/Tasa790_012/ImpresoRellenar" target="_blank" class="block w-full bg-amber-500 text-white text-center py-3 rounded-xl font-bold">
+                Tasa 790 Código 012 - Policía Nacional
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(id) {
+        document.getElementById(id).classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+</script>
 
 </body>
 </html>
