@@ -16,11 +16,12 @@ INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marca
 
 -- 4. DOCUMENTOS PARA EMPADRONAMIENTO (Trámite 2)
 INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (5, 'DNI/Pasaporte', 'Original en vigor', 'Original', 'Gratis', true, false, 2);
-INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (6, 'Contrato Alquiler', 'O autorización del dueño', 'Copia', 'Gratis', true, false, 2);
+INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (6, 'Solicitud de empadornamiento', 'Descargar y rellenar el PDF', 'Copia', 'Gratis', true, false, 2);
+INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (7, 'Justificante de cita previa', 'Debes realizar la cita antes de acudir', 'Copia', 'Gratis', true, false, 2);
 
 -- 5. DOCUMENTOS PARA ABONO TRANSPORTE (Trámite 3)
-INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (7, 'Fotografía reciente', 'Tamaño carné color', 'Original', '5.00€', true, false, 3);
-INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (8, 'Solicitud Tarjeta', 'Formulario oficial', 'Original', 'Gratis', true, false, 3);
+INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (8, 'Fotografía reciente', 'Tamaño carné color', 'Original', '5.00€', true, false, 3);
+INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (9, 'Solicitud Tarjeta', 'Formulario oficial', 'Original', 'Gratis', true, false, 3);
 
 -- 6. CONSEJOS
 INSERT INTO consejo (autor, categoria, contenido, tramite_id) VALUES ('Beatriz', 'NIE', 'Llevad el pasaporte original.', 1);
