@@ -6,7 +6,7 @@ INSERT INTO sedes (id, nombre, direccion, horario, telefono, latitud, longitud) 
 -- 2. TRÁMITES
 INSERT INTO tramites (id, titulo, descripcion, completado, plazo, ubicacion, url_cita, sede_id) VALUES (1, 'NIE Inicial', 'Solicitud de número de identidad de extranjero', false, '90 días', 'Oficina Pradillo', 'https://sede.administracionespublicas.gob.es/pagina/index/directorio/icpplus', 1);
 INSERT INTO tramites (id, titulo, descripcion, completado, plazo, ubicacion, url_cita, sede_id) VALUES (2, 'Empadronamiento', 'Inscripción en el padrón municipal de Madrid', false, 'Inmediato', 'Ayuntamiento de Madrid', 'https://www.madrid.es/citaprevia', 2);
-INSERT INTO tramites (id, titulo, descripcion, completado, plazo, ubicacion, url_cita, sede_id) VALUES (3, 'Abono Transporte', 'Tarjeta transporte público zona A', false, '7-15 días', 'Metro / Estancos', 'https://tarjetatransportepublico.crtm.es/', 3);
+INSERT INTO tramites (id, titulo, descripcion, completado, plazo, ubicacion, url_cita, sede_id) VALUES (3, 'Abono Transporte', 'Tarjeta transporte público zona A', false, '7-15 días', 'Metro / Estancos', 'https://webttp.comunidad.madrid/CRTM-ABONOS/entrada.aspx?s=individual', 3);
 
 -- 3. DOCUMENTOS PARA NIE (Trámite 1)
 INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (1, 'Modelo EX-15', 'Formulario oficial de solicitud', 'Copia', 'Gratis', true, false, 1);
@@ -22,6 +22,7 @@ INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marca
 -- 5. DOCUMENTOS PARA ABONO TRANSPORTE (Trámite 3)
 INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (8, 'Fotografía reciente', 'Tamaño carné color', 'Original', '5.00€', true, false, 3);
 INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (9, 'Solicitud Tarjeta', 'Formulario oficial', 'Original', 'Gratis', true, false, 3);
+INSERT INTO documentos (id, nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES (10, 'DNI/Pasaporte', 'Original en vigor', 'Original', 'Gratis', true, false, 3);
 
 -- 6. CONSEJOS
 INSERT INTO consejo (autor, categoria, contenido, tramite_id) VALUES ('Beatriz', 'NIE', 'Llevad el pasaporte original.', 1);

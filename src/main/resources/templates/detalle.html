@@ -86,8 +86,6 @@
             <div class="relative z-10">
                 <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
                     <i class="fas fa-file-signature text-emerald-200"></i> Solicitud de empadornamiento
-
-
                 </h3>
                 <div class="space-y-3 mb-5">
                     <p class="text-xs text-emerald-50 leading-relaxed">
@@ -104,6 +102,29 @@
             <i class="fas fa-map-marked-alt absolute -right-4 -bottom-4 text-white/10 text-8xl rotate-12"></i>
         </div>
 
+        <div th:if="${tramite.id == 3}" class="bg-red-600 text-white p-6 rounded-3xl shadow-lg relative overflow-hidden">
+            <div class="relative z-10">
+                <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
+                    <i class="fas fa-subway text-red-200"></i> Emisión de Tarjeta Física
+                </h3>
+                <div class="space-y-3 mb-5">
+                    <p class="text-xs text-red-50 leading-relaxed">
+                        La emisión cuesta <strong>4,00 €</strong> (se paga en la cita). <br>
+                        <span class="inline-block mt-2 bg-red-700/50 p-2 rounded-lg">
+                            <strong>Tip:</strong> Si vas a una oficina de gestión principal, a menudo te hacen la foto allí mismo de forma gratuita.
+                        </span>
+                    </p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="openModal('modalAbono')"
+                            class="text-[10px] bg-white text-red-600 px-3 py-2 rounded-lg font-bold hover:bg-red-50 transition-all">
+                        <i class="fas fa-info-circle mr-1"></i> Detalles del pago
+                    </button>
+                </div>
+            </div>
+            <i class="fas fa-bus absolute -right-4 -bottom-4 text-white/10 text-8xl rotate-12"></i>
+        </div>
+
         <div th:if="${tramite.id == 1}" class="bg-white border-2 border-blue-50 p-6 rounded-3xl shadow-sm">
             <h3 class="text-[#1e3a8a] font-extrabold text-sm mb-2 flex items-center gap-2">
                 <i class="fas fa-fingerprint"></i> ¿Cómo justificar tu solicitud?
@@ -111,7 +132,6 @@
             <p class="text-[11px] text-slate-500 mb-4 italic leading-relaxed">
                 El NIE no se da "porque sí"; debes demostrar por qué lo necesitas. Dependiendo de tu situación, lleva:
             </p>
-
             <div class="space-y-3">
                 <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
                     <div class="mt-1 bg-blue-100 text-blue-600 p-2 rounded-lg text-xs"><i class="fas fa-graduation-cap"></i></div>
@@ -141,10 +161,7 @@
             <h3 class="text-emerald-700 font-extrabold text-sm mb-2 flex items-center gap-2">
                 <i class="fas fa-home"></i> Acreditación de la Vivienda
             </h3>
-            <p class="text-[11px] text-slate-500 mb-4 italic leading-relaxed">
-                Aquí depende de tu situación:
-            </p>
-
+            <p class="text-[11px] text-slate-500 mb-4 italic leading-relaxed">Aquí depende de tu situación:</p>
             <div class="space-y-3">
                 <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
                     <div class="mt-1 bg-emerald-100 text-emerald-600 p-2 rounded-lg text-xs"><i class="fas fa-key"></i></div>
@@ -165,6 +182,36 @@
                     <div>
                         <h4 class="text-xs font-bold text-slate-700">Si vives con alguien (autorización)</h4>
                         <p class="text-[10px] text-slate-500 leading-tight text-pretty">La persona que figura en el contrato debe firmar el apartado de "Autorización de domicilio" en tu hoja padronal y adjuntar copia de su DNI/Pasaporte.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${tramite.id == 3}" class="bg-white border-2 border-red-50 p-6 rounded-3xl shadow-sm">
+            <h3 class="text-red-700 font-extrabold text-sm mb-2 flex items-center gap-2">
+                <i class="fas fa-tags"></i> Justificación para Descuentos (Si aplica)
+            </h3>
+            <p class="text-[11px] text-slate-500 mb-4 italic leading-relaxed">Para pagar menos en tus abonos, debes llevar:</p>
+            <div class="space-y-3">
+                <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="mt-1 bg-red-100 text-red-600 p-2 rounded-lg text-xs"><i class="fas fa-birthday-cake"></i></div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-700">Abono Joven (Hasta los 26 años)</h4>
+                        <p class="text-[10px] text-slate-500">Solo con tu pasaporte/NIE basta para acreditar la edad. El precio en 2026 es de <strong>10 € al mes</strong> para todas las zonas.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="mt-1 bg-blue-100 text-blue-600 p-2 rounded-lg text-xs"><i class="fas fa-users"></i></div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-700">Familia Numerosa</h4>
+                        <p class="text-[10px] text-slate-500">Título de Familia Numerosa vigente para obtener un <strong>20% o 50% de descuento</strong> adicional.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="mt-1 bg-amber-100 text-amber-600 p-2 rounded-lg text-xs"><i class="fas fa-wheelchair"></i></div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-700">Discapacidad</h4>
+                        <p class="text-[10px] text-slate-500 leading-tight">Certificado oficial con grado igual o superior al <strong>33%</strong>.</p>
                     </div>
                 </div>
             </div>
@@ -199,7 +246,6 @@
         <a th:href="${tramite.urlCita}" target="_blank" class="block w-full bg-[#1e3a8a] text-white text-center py-4 rounded-2xl font-bold shadow-lg shadow-blue-900/20 hover:bg-blue-800 transition-all">
             <i class="fas fa-calendar-alt mr-2"></i> Pedir Cita Previa
         </a>
-
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <h3 class="text-xs font-bold text-slate-800 uppercase mb-4 tracking-wider">Tips de la comunidad</h3>
             <div class="space-y-4">
@@ -224,9 +270,7 @@
                 <h4 class="font-bold text-[#1e3a8a] mb-2 text-xs uppercase">Consejo:</h4>
                 <p class="text-xs">Rellénalo con mayúsculas de imprenta o directamente en el ordenador antes de imprimirlo. Marca la casilla <strong>"Asignación de NIE"</strong>.</p>
             </div>
-            <a href="https://www.we-pdf.com/es/editor?action=form&form=ex-15" target="_blank" class="block w-full bg-[#1e3a8a] text-white text-center py-3 rounded-xl font-bold">
-                Descargar PDF Oficial (Sede Electrónica)
-            </a>
+            <a href="https://www.we-pdf.com/es/editor?action=form&form=ex-15" target="_blank" class="block w-full bg-[#1e3a8a] text-white text-center py-3 rounded-xl font-bold">Descargar PDF Oficial</a>
         </div>
     </div>
 </div>
@@ -248,9 +292,7 @@
                     <li>Selecciona "En efectivo" e imprime el PDF generado.</li>
                 </ol>
             </div>
-            <a href="https://sede.policia.gob.es/Tasa790_012/ImpresoRellenar" target="_blank" class="block w-full bg-amber-500 text-white text-center py-3 rounded-xl font-bold">
-                Tasa 790 Código 012 - Policía Nacional
-            </a>
+            <a href="https://sede.policia.gob.es/Tasa790_012/ImpresoRellenar" target="_blank" class="block w-full bg-amber-500 text-white text-center py-3 rounded-xl font-bold">Tasa 790 Código 012</a>
         </div>
     </div>
 </div>
@@ -258,31 +300,42 @@
 <div id="modalHoja" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
     <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
         <div class="p-6 border-b border-slate-100 flex justify-between items-center">
-            <h3 class="font-extrabold text-slate-800">Hoja Padronal - Ayuntamiento de Madrid</h3>
+            <h3 class="font-extrabold text-slate-800">Hoja Padronal - Madrid</h3>
             <button onclick="closeModal('modalHoja')" class="text-slate-400 hover:text-slate-600 text-xl">&times;</button>
         </div>
         <div class="p-6 overflow-y-auto max-h-[60vh] text-sm text-slate-600 space-y-4">
-            <p>Este es el documento que debes imprimir y rellenar para tu cita de empadronamiento.</p>
             <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
                 <h4 class="font-bold text-emerald-800 mb-2 text-xs uppercase">Requisito clave:</h4>
                 <p class="text-xs">Si te empadronas con más personas, todos los mayores de edad deben firmar esta hoja.</p>
             </div>
-            <a href="https://sede.madrid.es/UnidadesDescentralizadas/UDCEstadistica/TramitesMunicipales/Ficheros/Hoja_padronal.pdf" target="_blank" class="block w-full bg-emerald-600 text-white text-center py-3 rounded-xl font-bold">
-                Descargar Hoja Padronal (PDF Oficial)
-            </a>
+            <a href="https://sede.madrid.es/UnidadesDescentralizadas/UDCEstadistica/TramitesMunicipales/Ficheros/Hoja_padronal.pdf" target="_blank" class="block w-full bg-emerald-600 text-white text-center py-3 rounded-xl font-bold">Descargar Hoja Padronal</a>
+        </div>
+    </div>
+</div>
+
+<div id="modalAbono" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+            <h3 class="font-extrabold text-slate-800">Pago y Foto de la Tarjeta (TTP)</h3>
+            <button onclick="closeModal('modalAbono')" class="text-slate-400 hover:text-slate-600 text-xl">&times;</button>
+        </div>
+        <div class="p-6 overflow-y-auto max-h-[60vh] text-sm text-slate-600 space-y-4">
+            <div class="bg-red-50 p-4 rounded-2xl border border-red-100">
+                <h4 class="font-bold text-red-800 mb-2 text-xs uppercase">Información útil:</h4>
+                <ul class="list-disc pl-5 space-y-2 text-xs">
+                    <li><strong>Precio:</strong> 4,00 € por la emisión física.</li>
+                    <li><strong>Método de pago:</strong> Se paga en el momento. Generalmente aceptan tarjeta.</li>
+                    <li><strong>Fotografía:</strong> <span class="text-red-700 font-bold">Tip: Si vas a una oficina de gestión principal, a menudo te hacen la foto allí mismo de forma gratuita.</span></li>
+                </ul>
+            </div>
+            <a href="https://webttp.comunidad.madrid/CRTM-ABONOS/entrada.aspx" target="_blank" class="block w-full bg-red-600 text-white text-center py-3 rounded-xl font-bold">Web Oficial CRTM</a>
         </div>
     </div>
 </div>
 
 <script>
-    function openModal(id) {
-        document.getElementById(id).classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeModal(id) {
-        document.getElementById(id).classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.body.style.overflow = 'auto'; }
 </script>
 
 </body>
