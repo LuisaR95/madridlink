@@ -1,7 +1,8 @@
 -- 1. SEDES
-INSERT INTO sedes (id, nombre, direccion, horario, telefono, latitud, longitud) VALUES (1, 'Oficina de Extranjería - Pradillo', 'Calle de Pradillo, 40', '09:00 - 14:00', '912 72 95 00', 40.448937, -3.671362);
-INSERT INTO sedes (id, nombre, direccion, horario, telefono, latitud, longitud) VALUES (2, 'Comisaría Manuel Luna', 'Calle de Manuel Luna, 29', '09:00 - 21:00', '915 82 29 00', 40.454669, -3.699779);
-INSERT INTO sedes (id, nombre, direccion, horario, telefono, latitud, longitud) VALUES (3, 'Oficina de Extranjería - Aluche', 'Av. de los Poblados, 51', '09:00 - 14:00', '913 22 85 00', 40.382830, -3.757562);
+INSERT INTO sedes (id, nombre, direccion, horario, telefono, latitud, longitud) VALUES (1, 'Comisaria de San Felipe', 'Calle de San Felipe, 7', '09:00 - 14:00', 'No disponible - cita previa web', 40.4615747, -3.6967795);
+INSERT INTO sedes (id, nombre, direccion, horario, telefono, latitud, longitud) VALUES (2, 'OAC Chamberí (Palafox)', 'Calle de Palafox, 4', '09:00 - 21:00', '914 80 00 10', 40.4307612, -3.7009174);
+INSERT INTO sedes (id, nombre, direccion, horario, telefono, latitud, longitud) VALUES (3, 'Sede Central Consorcio (Ríos Rosas)', 'Plaza del Descubridor Diego de Ordás, 3', '8:00 a 20:00', '915 80 42 60', 40.4677165, -3.6919624);
+INSERT INTO sedes (id, nombre, direccion, horario, telefono, latitud, longitud) VALUES (4, 'Oficina de Extranjería (Padre Piquer)', 'Avenida del Padre Piquer, 18', '9:00 a 14:00 y de 16:00 a 20:00', '912 72 95 00', 40.392971, -3.7679911);
 
 -- 2. TRÁMITES
 INSERT INTO tramites (id, titulo, descripcion, completado, plazo, ubicacion, url_cita, sede_id) VALUES (1, 'NIE Inicial', 'Solicitud de número de identidad de extranjero', false, '90 días', 'Oficina Pradillo', 'https://sede.administracionespublicas.gob.es/pagina/index/directorio/icpplus', 1);

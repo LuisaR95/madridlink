@@ -109,4 +109,9 @@ public class MainController {
         model.addAttribute("todosLosTramites", tramiteRepository.findAll());
         return "comunidad";
     }
+    @GetMapping("/sedes")
+    public String verTodasLasSedes(Model model) {
+        model.addAttribute("sedes", sedeRepository.findAll());
+        return "sedes";
+    }
 }
