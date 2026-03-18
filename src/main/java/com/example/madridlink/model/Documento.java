@@ -12,9 +12,11 @@ public class Documento {
 
     private String nombre;
     private String descripcion;
-    private String tipo;      // Para "Original/Copia"
-    private String costo;     // Para "9.84€" o "Gratis"
+    private String tipo;
+    private String costo;
     private boolean obligatorio;
+
+    @Transient // ESTA es la clave: no se guarda en la DB, solo sirve para que Thymeleaf pinte el check
     private boolean marcado;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -25,6 +27,7 @@ public class Documento {
     }
 
     // --- GETTERS Y SETTERS ---
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

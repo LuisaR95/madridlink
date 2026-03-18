@@ -10,15 +10,21 @@ INSERT INTO tramites (titulo, descripcion, completado, plazo, ubicacion, url_cit
 INSERT INTO tramites (titulo, descripcion, completado, plazo, ubicacion, url_cita, sede_id) VALUES ('Abono Transporte', 'Tarjeta transporte público zona A', false, '7-15 días', 'Metro / Estancos', 'https://webttp.comunidad.madrid/CRTM-ABONOS/entrada.aspx?s=individual', 3);
 
 -- 3. DOCUMENTOS PARA NIE (Trámite 1)
-INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES ('Modelo EX-15', 'Formulario oficial de solicitud', 'Copia', 'Gratis', true, false, 1);
-INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES ('Pasaporte Completo', 'Todas las páginas', 'original y copia', 'Variable', true, false, 1);
-INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES ('Tasa 790 012', 'Justificante de pago', 'Original', '9.84€', true, false, 1);
-INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES ('Justificante de la Cita Previa', 'Debes llevar impresa la confirmación', 'Original', 'gratis', true, false, 1);
+INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, tramite_id) VALUES ('Modelo EX-15', 'Formulario oficial de solicitud', 'Copia', 'Gratis', true, 1);
+INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, tramite_id) VALUES ('Pasaporte Completo', 'Todas las páginas', 'original y copia', 'Variable', true,1);
+INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, tramite_id) VALUES ('Tasa 790 012', 'Justificante de pago', 'Original', '9.84€', true,  1);
+INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, tramite_id) VALUES ('Justificante de la Cita Previa', 'Debes llevar impresa la confirmación', 'Original', 'gratis', true, 1);
 
 -- 4. DOCUMENTOS PARA EMPADRONAMIENTO (Trámite 2)
-INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES ('DNI/Pasaporte', 'Original en vigor', 'Original', 'Gratis', true, false, 2);
-INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES ('Solicitud de empadornamiento', 'Descargar y rellenar el PDF', 'Copia', 'Gratis', true, false, 2);
-INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, marcado, tramite_id) VALUES ('Justificante de cita previa', 'Debes realizar la cita antes de acudir', 'Copia', 'Gratis', true, false, 2);
+INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, tramite_id) VALUES ('DNI/Pasaporte', 'Original en vigor', 'Original', 'Gratis', true,  2);
+INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, tramite_id) VALUES ('Solicitud de empadornamiento', 'Descargar y rellenar el PDF', 'Copia', 'Gratis', true, 2);
+INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, tramite_id) VALUES ('Justificante de cita previa', 'Debes realizar la cita antes de acudir', 'Copia', 'Gratis', true, 2);
+
+-- DOCUMENTOS PARA ABONO TRANSPORTE (Trámite 3)
+INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, tramite_id) VALUES ('DNI o Pasaporte', 'Original para escanear en el momento', 'Original', 'Gratis', true, 3);
+INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, tramite_id) VALUES ('Fotografía reciente', 'Tamaño carnet a color (si no vas presencial)', 'Original', 'Gratis', true,3);
+INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, tramite_id) VALUES ('Título de Familia Numerosa', 'Solo si aplicas para el descuento', 'Copia', 'Gratis', false, 3);
+INSERT INTO documentos (nombre, descripcion, tipo, costo, obligatorio, tramite_id) VALUES ('Justificante de pago', 'Copia del pago de los 4€ de la tarjeta', 'Copia', '4.00€', true, 3);
 
 -- 5. CONSEJOS
 INSERT INTO consejo (autor, categoria, contenido, tramite_id) VALUES ('Beatriz', 'NIE', 'Llevad el pasaporte original.', 1);

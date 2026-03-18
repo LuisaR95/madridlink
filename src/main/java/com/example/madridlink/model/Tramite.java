@@ -18,20 +18,26 @@ public class Tramite {
     private String ubicacion;
     private String urlCita;
 
+    @Transient // No se guarda en la DB, se calcula en tiempo real
+    private int progreso;
+
+    // 1. RELACIÓN CON DOCUMENTOS (Corregida)
     @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Documento> documentos;
 
+    // 2. RELACIÓN CON SEDE
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sede_id")
     private Sede sede;
 
-    @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL)
+    // 3. RELACIÓN CON CONSEJOS (Corregida a EAGER)
+    @OneToMany(mappedBy = "tramite", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Consejo> consejos;
 
     public Tramite() {
     }
 
-
+    // --- LÓGICA DE PROGRESO ---
     public int getProgresoCalculado() {
         if (documentos == null || documentos.isEmpty()) {
             return completado ? 100 : 0;
@@ -40,7 +46,7 @@ public class Tramite {
         return (int) ((marcados * 100) / documentos.size());
     }
 
-    // --- TUS GETTERS Y SETTERS ORIGINALES ---
+    // --- GETTERS Y SETTERS ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -70,4 +76,7 @@ public class Tramite {
 
     public List<Consejo> getConsejos() { return consejos; }
     public void setConsejos(List<Consejo> consejos) { this.consejos = consejos; }
+
+    public int getProgreso() { return progreso; }
+    public void setProgreso(int progreso) { this.progreso = progreso; }
 }

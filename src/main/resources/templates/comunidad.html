@@ -5,45 +5,106 @@
     <title>MadriLink - Comunidad</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1e3a8a; --bg: #f1f5f9; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 40px 20px; margin: 0; }
+        :root { --primary: #1e3a8a; --bg: #f8fafc; --text: #334155; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 40px 20px; margin: 0; }
         .container { max-width: 700px; margin: auto; }
-        .post { background: white; padding: 25px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .author { font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-        .tag { font-size: 0.7rem; background: #eff6ff; color: #1d4ed8; padding: 3px 10px; border-radius: 6px; }
-        .form-card { background: white; padding: 30px; border-radius: 20px; border-top: 4px solid var(--primary); }
-        textarea, input, select { width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 15px; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        button:hover { background: #172554 !important; }
+
+        /* Estilo de las tarjetas de consejos */
+        .post {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s;
+        }
+        .post:hover { transform: translateY(-2px); }
+
+        .author { font-weight: 800; color: var(--primary); display: flex; align-items: center; justify-content: space-between; }
+        .author-info { display: flex; align-items: center; gap: 10px; }
+
+        .tag { font-size: 0.75rem; background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: 999px; font-weight: 600; }
+
+        /* Formulario */
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            border-bottom: 5px solid var(--primary);
+        }
+        textarea, input, select {
+            width: 100%;
+            padding: 14px;
+            margin-top: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        textarea:focus, input:focus, select:focus { outline: 2px solid #93c5fd; border-color: transparent; }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-submit:hover { background: #1e40af; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3); }
+
+        .back-link { display: inline-block; margin-top: 30px; color: #64748b; text-decoration: none; font-weight: 600; transition: color 0.2s; }
+        .back-link:hover { color: var(--primary); }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1 style="text-align: center; color: var(--primary); margin-bottom: 30px;">👥 Comunidad MadriLink</h1>
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: var(--primary); font-size: 2.5rem; font-weight: 800; margin-bottom: 10px;">👥 Comunidad MadriLink</h1>
+        <p style="color: #64748b;">Comparte tu experiencia y ayuda a otros con sus trámites en Madrid.</p>
+    </div>
 
     <div th:each="c : ${consejos}" class="post">
         <div class="author">
-            👤 <span th:text="${c.autor}">Nombre</span>
+            <div class="author-info">
+                <span style="font-size: 1.2rem;">👤</span>
+                <span th:text="${c.autor}">Nombre</span>
+            </div>
             <span class="tag" th:if="${c.tramite != null}" th:text="${c.tramite.titulo}">Trámite</span>
         </div>
-        <p th:text="${c.contenido}" style="margin-top: 15px; line-height: 1.6; color: #334155;"></p>
+        <p th:text="${c.contenido}" style="margin-top: 15px; line-height: 1.6; font-size: 1.05rem;"></p>
     </div>
 
     <div class="form-card">
-        <h3 style="margin-top:0; color: #1e293b;">¿Quieres ayudar a otros?</h3>
+        <h3 style="margin-top:0; color: #1e293b; font-size: 1.3rem;">💡 ¿Tienes un consejo?</h3>
         <form th:action="@{/comunidad/publicar}" th:object="${nuevoConsejo}" method="post">
-            <input type="text" th:field="*{autor}" placeholder="Tu nombre" required>
+            <label style="font-size: 0.9rem; font-weight: 600; color: #475569;">Tu nombre o apodo</label>
+            <input type="text" th:field="*{autor}" placeholder="Ej: Juan M." required>
+
+            <label style="font-size: 0.9rem; font-weight: 600; color: #475569;">Sobre qué trámite es el consejo</label>
             <select name="tramiteId" required>
-                <option value="" disabled selected>Selecciona el trámite...</option>
+                <option value="" disabled selected>Selecciona un trámite...</option>
                 <option th:each="t : ${todosLosTramites}" th:value="${t.id}" th:text="${t.titulo}"></option>
             </select>
-            <textarea th:field="*{contenido}" rows="4" placeholder="Escribe tu consejo aquí..." required></textarea>
-            <button type="submit" style="width:100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s;">Publicar mi consejo</button>
+
+            <label style="font-size: 0.9rem; font-weight: 600; color: #475569;">Tu mensaje</label>
+            <textarea th:field="*{contenido}" rows="4" placeholder="Escribe aquí los pasos o tips que te ayudaron..." required></textarea>
+
+            <button type="submit" class="btn-submit">Publicar en la comunidad</button>
         </form>
     </div>
 
-    <div style="text-align:center; margin-top: 30px;">
-        <a th:href="@{/}" style="color: #64748b; font-weight: 600; text-decoration: none; font-size: 0.9rem;">← Volver al inicio</a>
+    <div style="text-align:center;">
+        <a th:href="@{/}" class="back-link">← Volver al panel de trámites</a>
     </div>
 </div>
 </body>
-</html>x
+</html>

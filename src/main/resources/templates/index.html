@@ -27,61 +27,63 @@
                 </div>
                 <div class="hidden sm:ml-8 sm:flex sm:space-x-8 h-full">
                     <a th:href="@{/}" class="nav-link-active inline-flex items-center px-1 pt-1 text-sm font-medium">Dashboard</a>
-                    <a th:href="@{/tramite/1}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Trámites</a>
-                    <a th:href="@{/sedes/buscar}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Directorio</a>
+                    <a th:href="@{/tramites}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Trámites</a>
+                    <a th:href="@{/sedes}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Sedes</a>
                     <a th:href="@{/comunidad}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Comunidad</a>
                 </div>
             </div>
-            <div class="flex items-center">
-                <img src="https://ui-avatars.com/api/?name=Usuario&background=1e3a8a&color=fff" class="h-8 w-8 rounded-full border border-slate-200">
+            <div class="flex items-center gap-4">
+                <div th:if="${#authorization.expression('isAuthenticated()')}" class="flex items-center gap-3">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-xs font-bold text-slate-800" th:text="${#authentication.name}">usuario@email.com</p>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="text-[10px] text-red-500 font-bold uppercase hover:underline">Cerrar Sesión</button>
+                        </form>
+                    </div>
+                    <img th:src="'https://ui-avatars.com/api/?name=' + ${#authentication.name} + '&background=1e3a8a&color=fff'" class="h-8 w-8 rounded-full border border-slate-200">
+                </div>
+                <div th:unless="${#authorization.expression('isAuthenticated()')}">
+                    <a th:href="@{/login}" class="text-sm font-bold text-[#1e3a8a] bg-blue-50 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors">
+                        Iniciar Sesión
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </nav>
 
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
     <div class="mb-8 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-slate-900">Bienvenida a Madrid 👋</h1>
-                <p class="text-slate-500 font-medium text-sm">Estado global de tus gestiones:</p>
+                <h1 class="text-2xl font-bold text-slate-900">Bienvenido a Madrid 👋</h1>
+                <p class="text-slate-500 font-medium text-sm">Gestiona tus trámites de extranjería fácilmente.</p>
             </div>
             <div class="bg-blue-50 px-6 py-2 rounded-2xl text-center">
                 <span class="text-3xl font-black text-[#1e3a8a]" th:text="${progresoGlobal} + '%'">0%</span>
-                <span class="text-[10px] font-bold text-[#1e3a8a] block uppercase tracking-wider">Completado</span>
+                <span class="text-[10px] font-bold text-[#1e3a8a] block uppercase tracking-wider">Tu Progreso</span>
             </div>
         </div>
         <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
-            <div class="bg-[#1e3a8a] h-full transition-all duration-1000"
-                 th:style="'width:' + ${progresoGlobal} + '%'"></div>
+            <div class="bg-[#1e3a8a] h-full transition-all duration-1000" th:style="'width:' + ${progresoGlobal} + '%'"></div>
         </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
         <div class="md:col-span-2 space-y-4">
-            <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <i class="fas fa-tasks text-[#1e3a8a]"></i> Mis Trámites Activos
+            <h3 id="seccion-tramites" class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <i class="fas fa-tasks text-[#1e3a8a]"></i> Trámites Disponibles
             </h3>
-
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div th:each="tramite : ${tramites}" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
                     <div class="flex justify-between items-start mb-3">
                         <span class="text-[10px] font-bold uppercase px-2 py-1 bg-blue-50 text-[#1e3a8a] rounded-md" th:text="${tramite.plazo}">Plazo</span>
                         <i class="fas fa-chevron-right text-slate-300"></i>
                     </div>
-                    <h4 class="font-bold text-slate-900 mb-1" th:text="${tramite.titulo}">Nombre Trámite</h4>
-                    <p class="text-xs text-slate-500 mb-4 line-clamp-2" th:text="${tramite.descripcion}">Descripción...</p>
-
-                    <div class="mb-4" th:with="total=${tramite.documentos.size()}, listos=${#lists.size(tramite.documentos.?[marcado])}">
-                        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-[#1e3a8a] h-full" th:style="'width:' + ${total > 0 ? (listos * 100 / total) : 0} + '%'"></div>
-                        </div>
-                    </div>
-
-                    <a th:href="@{/tramite/{id}(id=${tramite.id})}" class="inline-block w-full text-center py-2 bg-slate-100 text-slate-700 text-sm font-bold rounded-lg hover:bg-[#1e3a8a] hover:text-white transition-colors">
-                        Gestionar Documentos
+                    <h4 class="font-bold text-slate-900 mb-1" th:text="${tramite.titulo}">Nombre</h4>
+                    <p class="text-xs text-slate-500 mb-4 line-clamp-2" th:text="${tramite.descripcion}"></p>
+                    <a th:href="@{/tramite/{id}(id=${tramite.id})}" class="inline-block w-full text-center py-2 bg-[#1e3a8a] text-white text-sm font-bold rounded-lg hover:bg-blue-900 transition-colors">
+                        Ver Documentos
                     </a>
                 </div>
             </div>
@@ -89,41 +91,34 @@
 
         <div class="space-y-6">
             <div class="bg-[#1e3a8a] p-6 rounded-2xl text-white shadow-lg shadow-blue-900/20">
-                <h3 class="font-bold text-lg mb-2">¿Necesitas ayuda?</h3>
-                <p class="text-blue-100 text-sm mb-4">Consulta los consejos de otros estudiantes en la comunidad.</p>
+                <h3 class="font-bold text-lg mb-2">Comunidad</h3>
+                <p class="text-blue-100 text-sm mb-4">¿Dudas con la cita previa? Lee los consejos de otros usuarios.</p>
                 <a th:href="@{/comunidad}" class="block text-center py-2 bg-white text-[#1e3a8a] font-bold rounded-lg text-sm">
-                    Ver Comunidad
+                    Ir al Foro
                 </a>
             </div>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 <h3 class="font-bold text-slate-800 mb-4">Sedes Recomendadas</h3>
                 <div class="space-y-4">
-                    <div class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-xl transition-colors">
+                    <div th:each="s : ${sedesInicio}" class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-xl transition-colors">
                         <div class="p-2 bg-blue-50 rounded-lg text-[#1e3a8a]">
                             <i class="fas fa-building"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-slate-800">Oficina Pradillo</p>
-                            <p class="text-[10px] text-slate-500 uppercase tracking-tight">Calle de Pradillo, 40</p>
+                            <p class="text-sm font-bold text-slate-800" th:text="${s.nombre}">Nombre de la Sede</p>
+                            <p class="text-[10px] text-slate-500 uppercase tracking-tight" th:text="${s.direccion}">Dirección</p>
                         </div>
                     </div>
-                    <div class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-xl transition-colors">
-                        <div class="p-2 bg-green-50 rounded-lg text-green-600">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-bold text-slate-800">Comisaría Aluche</p>
-                            <p class="text-[10px] text-slate-500 uppercase tracking-tight">Av. de los Poblados, s/n</p>
-                        </div>
-                    </div>
+                    <p th:if="${#lists.isEmpty(sedesInicio)}" class="text-xs text-slate-400 italic">
+                        No hay sedes disponibles.
+                    </p>
                 </div>
-                <a th:href="@{/sedes/buscar}" class="block mt-6 text-center text-sm font-bold text-[#1e3a8a] hover:underline">
+                <a th:href="@{/sedes}" class="block mt-6 text-center text-sm font-bold text-[#1e3a8a] hover:underline">
                     Ver directorio completo →
                 </a>
             </div>
         </div>
-
     </div>
 </main>
 </body>
