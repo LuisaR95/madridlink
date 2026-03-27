@@ -3,7 +3,7 @@ package com.example.madridlink.controller;
 import com.example.madridlink.model.Documento;
 import com.example.madridlink.model.Tramite;
 import com.example.madridlink.model.Usuario;
-import com.example.madridlink.model.Sede; // Asegúrate de importar tu modelo Sede
+import com.example.madridlink.model.Sede;
 import com.example.madridlink.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
