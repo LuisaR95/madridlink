@@ -1,6 +1,7 @@
 package com.example.madridlink.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.util.List;
 
 @Entity
@@ -11,9 +12,19 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Restricciones para el Email
+    @NotBlank(message = "El correo es obligatorio")
+    @Email(message = "Debe introducir un formato de correo válido")
     @Column(unique = true, nullable = false)
     private String email;
 
+    // Restricciones para la Contraseña
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
+    @Pattern(
+            regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!¡¿?]).*$",
+            message = "La contraseña debe contener al menos una mayúscula, una minúscula, un número y un símbolo"
+    )
     @Column(nullable = false)
     private String password;
 
