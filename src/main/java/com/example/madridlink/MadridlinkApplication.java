@@ -8,8 +8,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling; // NUEVO: Para el correo programado
 
 @SpringBootApplication
+@EnableScheduling // NUEVO: Activa el reloj interno de Spring para mandar correos automáticamente
 public class MadridlinkApplication {
 
     public static void main(String[] args) {

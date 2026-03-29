@@ -29,6 +29,9 @@
                 <div class="hidden sm:ml-8 sm:flex sm:space-x-8 h-full">
                     <a th:href="@{/}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Dashboard</a>
                     <a th:href="@{/tramites}" class="border-b-2 border-[#1e3a8a] text-[#1e3a8a] inline-flex items-center px-1 pt-1 text-sm font-medium">Trámites</a>
+                    <a th:href="@{/mis-citas}" class="text-slate-500 hover:text-[#1e3a8a] inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors">
+                        <i class="fas fa-calendar-alt mr-2"></i> Mis Citas
+                    </a>
                     <a th:href="@{/sedes}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Sedes</a>
                     <a th:href="@{/comunidad}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Comunidad</a>
                 </div>
@@ -52,14 +55,14 @@
 <div class="max-w-5xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
     <aside class="col-span-3 space-y-2">
-    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-2 mb-4">Todos los trámites</h3>
-    <div th:each="t : ${allTramites}">
-        <a th:href="@{/tramite/{id}(id=${t.id})}"
-           th:class="${t.id == tramite.id} ? 'bg-blue-50 text-blue-700 p-3 rounded-xl block font-bold' : 'text-slate-500 p-3 rounded-xl block hover:bg-white'">
-            <i class="fas fa-file-alt text-sm"></i>
-            <span class="text-sm" th:text="${t.titulo}">Trámite</span>
-        </a>
-    </div>
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-2 mb-4">Todos los trámites</h3>
+        <div th:each="t : ${allTramites}">
+            <a th:href="@{/tramite/{id}(id=${t.id})}"
+               th:class="${t.id == tramite.id} ? 'bg-blue-50 text-blue-700 p-3 rounded-xl block font-bold' : 'text-slate-500 p-3 rounded-xl block hover:bg-white'">
+                <i class="fas fa-file-alt text-sm"></i>
+                <span class="text-sm" th:text="${t.titulo}">Trámite</span>
+            </a>
+        </div>
         <hr class="border-slate-200 my-4">
         <a th:href="@{/sedes}" class="flex items-center gap-3 p-3 text-slate-500 text-sm font-medium hover:text-blue-600 transition-colors">
             <i class="fas fa-map-marked-alt"></i> Directorio de Sedes
@@ -270,44 +273,49 @@
 
 
         <div class="space-y-3">
-        <h3 class="text-sm font-bold text-slate-800 px-1">Requisitos necesarios</h3>
+            <h3 class="text-sm font-bold text-slate-800 px-1">Requisitos necesarios</h3>
 
-        <div th:each="doc : ${documentos}"
-             th:id="'doc-' + ${doc.id}"
-             class="card-compact bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm scroll-mt-24">
+            <div th:each="doc : ${documentos}"
+                 th:id="'doc-' + ${doc.id}"
+                 class="card-compact bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm scroll-mt-24">
 
-            <div class="flex items-center gap-4">
-                <form th:action="@{/documento/marcar/{id}(id=${doc.id})}" method="post">
-                    <input type="hidden" name="anchor" th:value="'doc-' + ${doc.id}" />
-                    <button type="submit"
-                            th:class="${doc.marcado} ? 'w-6 h-6 rounded-md bg-green-500 text-white flex items-center justify-center' : 'w-6 h-6 rounded-md border-2 border-slate-200 hover:border-[#1e3a8a] transition-colors'">
-                        <i class="fas fa-check text-[10px]" th:if="${doc.marcado}"></i>
-                    </button>
-                </form>
+                <div class="flex items-center gap-4">
+                    <form th:action="@{/documento/marcar/{id}(id=${doc.id})}" method="post">
+                        <input type="hidden" name="anchor" th:value="'doc-' + ${doc.id}" />
+                        <button type="submit"
+                                th:class="${doc.marcado} ? 'w-6 h-6 rounded-md bg-green-500 text-white flex items-center justify-center' : 'w-6 h-6 rounded-md border-2 border-slate-200 hover:border-[#1e3a8a] transition-colors'">
+                            <i class="fas fa-check text-[10px]" th:if="${doc.marcado}"></i>
+                        </button>
+                    </form>
 
-                <div>
-                    <p class="text-sm font-semibold text-slate-700" th:text="${doc.nombre}">Nombre del Documento</p>
-                    <p class="text-[10px] text-slate-400" th:text="${doc.descripcion}">Descripción del documento</p>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-700" th:text="${doc.nombre}">Nombre del Documento</p>
+                        <p class="text-[10px] text-slate-400" th:text="${doc.descripcion}">Descripción del documento</p>
+                    </div>
+                </div>
+
+                <div class="text-right">
+            <span class="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded border border-slate-100 block mb-1"
+                  th:text="${doc.costo}">Gratis</span>
                 </div>
             </div>
 
-            <div class="text-right">
-            <span class="text-[9px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded border border-slate-100 block mb-1"
-                  th:text="${doc.costo}">Gratis</span>
-            </div>
+            <p th:if="${documentos == null or #lists.isEmpty(documentos)}" class="text-xs text-slate-400 italic px-1">
+                No hay documentos registrados en la base de datos para este trámite.
+            </p>
         </div>
-
-        <p th:if="${documentos == null or #lists.isEmpty(documentos)}" class="text-xs text-slate-400 italic px-1">
-            No hay documentos registrados en la base de datos para este trámite.
-        </p>
-    </div>
     </main>
 
 
     <aside class="lg:col-span-3 space-y-6">
         <a th:href="${tramite.urlCita}" target="_blank" class="block w-full bg-[#1e3a8a] text-white text-center py-4 rounded-2xl font-bold shadow-lg shadow-blue-900/20 hover:bg-blue-800 transition-all">
-            <i class="fas fa-calendar-alt mr-2"></i> Pedir Cita Previa
+            <i class="fas fa-external-link-alt mr-2"></i> Pedir Cita Previa
         </a>
+
+        <a th:href="@{/mis-citas}" class="block w-full bg-orange-500 text-white text-center py-4 rounded-2xl font-bold shadow-lg shadow-orange-900/20 hover:bg-orange-600 transition-all">
+            <i class="fas fa-calendar-check mr-2"></i> Mi Calendario MadriLink
+        </a>
+
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <h3 class="text-xs font-bold text-slate-800 uppercase mb-4 tracking-wider">Tips de la comunidad</h3>
             <div class="space-y-4" th:if="${tramite.consejos != null}">
