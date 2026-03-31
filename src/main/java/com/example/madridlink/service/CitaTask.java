@@ -23,17 +23,17 @@ public class CitaTask {
     /**
      * Tarea programada que se ejecuta cada mañana a las 9:00 AM
      */
-    @Scheduled(cron = "0 0 9 * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void enviarRecordatorios() {
-        // 1. Definimos el rango de "mañana" (desde las 00:00 hasta las 23:59)
-        LocalDate mañana = LocalDate.now().plusDays(1);
+
+        LocalDate mañana = LocalDate.now();
         LocalDateTime inicioMañana = mañana.atStartOfDay();
         LocalDateTime finMañana = mañana.atTime(LocalTime.MAX);
 
-        // 2. Buscamos las citas en ese rango
+
         List<Cita> citasDeMañana = citaRepository.findByFechaHoraBetween(inicioMañana, finMañana);
 
-        // 3. Enviamos el correo a cada usuario
+
         for (Cita cita : citasDeMañana) {
             String destinatario = cita.getUsuario().getEmail();
             String asunto = "🔔 Recordatorio: Cita MadriLink - " + cita.getTramite();
