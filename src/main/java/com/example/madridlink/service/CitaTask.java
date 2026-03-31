@@ -26,7 +26,7 @@ public class CitaTask {
     @Scheduled(cron = "0 * * * * ?")
     public void enviarRecordatorios() {
 
-        LocalDate mañana = LocalDate.now();
+        LocalDate mañana = LocalDate.now().plusDays(1);
         LocalDateTime inicioMañana = mañana.atStartOfDay();
         LocalDateTime finMañana = mañana.atTime(LocalTime.MAX);
 
