@@ -20,7 +20,7 @@ public class EmailService {
     public void enviarCorreo(String to, String subject, String body) {
         try {
             SimpleMailMessage mensaje = new SimpleMailMessage();
-            mensaje.setFrom("tu-correo@gmail.com"); // El mismo que pongas en properties
+            mensaje.setFrom("luisa.rincond95@gmail.com");
             mensaje.setTo(to);
             mensaje.setSubject(subject);
             mensaje.setText(body);
