@@ -2,324 +2,154 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MadriLink - Detalle</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .card-compact { transition: all 0.2s ease; }
-        .card-compact:hover { border-color: #1e3a8a; transform: translateY(-1px); }
         .scroll-mt-24 { scroll-margin-top: 6rem; }
-        /* Ocultar scrollbar en mobile para un look más de App */
         body::-webkit-scrollbar { display: none; }
+        @media (max-width: 640px) {
+            .modal-content-box { width: 92%; max-height: 90vh; overflow-y: auto; }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 pb-20 lg:pb-0">
+<body class="bg-slate-50 text-slate-900 pb-24 lg:pb-0">
 
-<nav class="bg-white border-b border-slate-200 sticky top-0 z-50 mb-6">
+<nav class="bg-white border-b border-slate-200 sticky top-0 z-50 mb-6 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <div class="flex-shrink-0 flex items-center gap-2">
-                    <div class="bg-[#1e3a8a] p-2 rounded-lg">
-                        <i class="fas fa-link text-white text-xs"></i>
-                    </div>
-                    <span class="text-lg md:text-xl font-bold tracking-tight text-slate-800">Madri<span class="text-[#1e3a8a]">Link</span></span>
+                    <img th:src="@{/images/logo4.png}" alt="Logo" class="h-9 w-auto">
                 </div>
                 <div class="hidden sm:ml-8 sm:flex sm:space-x-8 h-full">
                     <a th:href="@{/}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Dashboard</a>
                     <a th:href="@{/tramites}" class="border-b-2 border-[#1e3a8a] text-[#1e3a8a] inline-flex items-center px-1 pt-1 text-sm font-medium">Trámites</a>
-                    <a th:href="@{/mis-citas}" class="text-slate-500 hover:text-[#1e3a8a] inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors">
-                        <i class="fas fa-calendar-alt mr-2"></i> Mis Citas
-                    </a>
                 </div>
             </div>
-
-            <div class="flex items-center gap-4">
-                <div th:if="${#authorization.expression('isAuthenticated()')}" class="flex items-center gap-3">
-                    <div class="text-right hidden sm:block">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest" th:text="${#authentication.name}">usuario@email.com</p>
-                        <form th:action="@{/logout}" method="post">
-                            <button type="submit" class="text-[10px] text-red-500 font-bold uppercase hover:underline">Cerrar Sesión</button>
-                        </form>
-                    </div>
-                    <img th:src="'https://ui-avatars.com/api/?name=' + ${#authentication.name} + '&background=1e3a8a&color=fff'" class="h-8 w-8 rounded-full border border-slate-200">
+            <div th:if="${#authorization.expression('isAuthenticated()')}" class="flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1" th:text="${#authentication.name}">usuario</p>
+                    <form th:action="@{/logout}" method="post"><button type="submit" class="text-[10px] text-red-500 font-black uppercase hover:underline">Cerrar Sesión</button></form>
                 </div>
+                <img th:src="'https://ui-avatars.com/api/?name=' + ${#authentication.name} + '&background=1e3a8a&color=fff'" class="h-8 w-8 rounded-full">
             </div>
         </div>
     </div>
 </nav>
 
-<div class="max-w-5xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+<div class="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
     <aside class="hidden lg:block lg:col-span-3 space-y-2">
-        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 mb-4">Todos los trámites</h3>
+        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 mb-4">Otros trámites</h3>
         <div th:each="t : ${allTramites}">
             <a th:href="@{/tramite/{id}(id=${t.id})}"
-               th:class="${t.id == tramite.id} ? 'bg-blue-50 text-blue-700 p-3 rounded-xl block font-bold' : 'text-slate-500 p-3 rounded-xl block hover:bg-white'">
-                <i class="fas fa-file-alt text-sm"></i>
+               th:class="${t.id == tramite.id} ? 'bg-blue-50 text-[#1e3a8a] p-3 rounded-xl block font-bold border-l-4 border-[#1e3a8a]' : 'text-slate-500 p-3 rounded-xl block hover:bg-white border-l-4 border-transparent'">
+                <i class="fas fa-file-alt mr-2 text-xs"></i>
                 <span class="text-sm" th:text="${t.titulo}">Trámite</span>
             </a>
         </div>
-        <hr class="border-slate-200 my-4">
-        <a th:href="@{/sedes}" class="flex items-center gap-3 p-3 text-slate-500 text-sm font-medium hover:text-blue-600 transition-colors">
-            <i class="fas fa-map-marked-alt"></i> Directorio de Sedes
-        </a>
     </aside>
 
     <main class="lg:col-span-6 space-y-6">
         <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-200 shadow-sm">
-            <div class="flex justify-between items-start mb-4">
-                <h1 class="text-xl md:text-2xl font-black text-slate-800 leading-tight" th:text="${tramite.titulo}">Nombre</h1>
-                <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded-full font-bold uppercase" th:text="${tramite.plazo}">Plazo</span>
+            <div class="flex justify-between items-start gap-2 mb-4">
+                <h1 class="text-2xl font-black text-slate-800 leading-tight" th:text="${tramite.titulo}">Nombre</h1>
+                <span class="text-[10px] bg-slate-100 text-slate-500 px-3 py-1 rounded-full font-bold uppercase" th:text="${tramite.plazo}">Plazo</span>
             </div>
             <p class="text-sm text-slate-500 mb-6 leading-relaxed" th:text="${tramite.descripcion}">Descripción</p>
 
             <div th:if="${tramite.sede != null}" class="mb-6 p-5 bg-slate-50 rounded-[1.5rem] border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div class="flex items-start gap-4">
-                    <div class="mt-1 bg-white p-2.5 rounded-xl shadow-sm text-blue-600">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
+                <div class="flex items-start gap-3">
+                    <div class="bg-white p-2.5 rounded-xl shadow-sm text-blue-600"><i class="fas fa-map-marker-alt"></i></div>
                     <div>
                         <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Sede Recomendada</h4>
-                        <p class="text-sm font-bold text-slate-700 leading-tight" th:text="${tramite.sede?.nombre}">Nombre Sede</p>
+                        <p class="text-sm font-bold text-slate-700" th:text="${tramite.sede?.nombre}">Nombre Sede</p>
                         <p class="text-[11px] text-slate-500" th:text="${tramite.sede?.direccion}">Dirección</p>
                     </div>
                 </div>
-
-                <a th:href="@{/sedes}" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[11px] font-bold text-slate-600 hover:text-blue-700 transition-all active:scale-95">
-                    VER MAPA
-                </a>
+                <a th:href="@{/sedes}" class="text-center px-4 py-2 bg-white border border-slate-200 rounded-xl text-[11px] font-bold text-slate-600 hover:text-[#1e3a8a]">VER MAPA</a>
             </div>
 
             <div class="space-y-3" th:with="total=${documentos != null ? #lists.size(documentos) : 0}, marcados=${documentos != null ? #lists.size(documentos.?[marcado]) : 0}">
-                <div class="flex justify-between text-[10px] font-black uppercase tracking-tighter">
-                    <span class="text-slate-400">Progreso del trámite</span>
+                <div class="flex justify-between text-[10px] font-black uppercase">
+                    <span class="text-slate-400">Tu progreso</span>
                     <span class="text-[#1e3a8a]" th:text="${total > 0 ? (marcados * 100 / total) + '%' : '0%'}">0%</span>
                 </div>
                 <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200/50">
-                    <div class="bg-[#1e3a8a] h-full transition-all duration-700"
-                         th:style="'width:' + ${total > 0 ? (marcados * 100 / total) : 0} + '%'"></div>
+                    <div class="bg-[#1e3a8a] h-full transition-all duration-700" th:style="'width:' + ${total > 0 ? (marcados * 100 / total) : 0} + '%'"></div>
                 </div>
             </div>
         </div>
 
-        <!-- SECCIÓN DE AYUDA ESPECÍFICA CON MODALES -->
         <div th:if="${tramite.id == 1}" class="bg-[#1e3a8a] text-white p-6 rounded-[2rem] shadow-lg relative overflow-hidden">
             <div class="relative z-10">
-                <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
-                    <i class="fas fa-exclamation-circle text-amber-400"></i> Guía: EX-15 y Tasa 790
-                </h3>
-                <div class="mb-5">
-                    <p class="text-xs text-blue-100 leading-relaxed">
-                        Existen pasos específicos para rellenar estos formularios correctamente. Pulsa para ver la guía.
-                    </p>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="openModal('modalEX15')"
-                            class="flex-1 min-w-[120px] text-[10px] bg-white text-[#1e3a8a] px-3 py-3 rounded-xl font-bold active:scale-95 transition-all uppercase tracking-widest">
-                        <i class="fas fa-info-circle mr-1"></i> Guía EX-15
-                    </button>
-                    <button onclick="openModal('modalTasa')"
-                            class="flex-1 min-w-[120px] text-[10px] bg-white/20 hover:bg-white/30 px-3 py-3 rounded-xl font-bold active:scale-95 transition-all uppercase tracking-widest border border-white/10">
-                        <i class="fas fa-credit-card mr-1"></i> Guía Tasa 790
-                    </button>
+                <h3 class="font-bold text-sm mb-3 flex items-center gap-2"><i class="fas fa-exclamation-circle text-amber-400"></i> Guía: EX-15 y Tasa 790</h3>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <button onclick="openModal('modalEX15')" class="w-full text-[10px] bg-white text-[#1e3a8a] px-3 py-3 rounded-xl font-bold uppercase tracking-widest active:scale-95 transition-all">Paso a paso EX-15</button>
+                    <button onclick="openModal('modalTasa')" class="w-full text-[10px] bg-white/20 px-3 py-3 rounded-xl font-bold uppercase tracking-widest border border-white/20 active:scale-95 transition-all">Paso a paso Tasa 790</button>
                 </div>
             </div>
-            <i class="fas fa-university absolute -right-4 -bottom-4 text-white/10 text-8xl rotate-12"></i>
         </div>
 
-        <div th:if="${tramite.id == 2}" class="bg-emerald-600 text-white p-6 rounded-[2rem] shadow-lg relative overflow-hidden">
-            <div class="relative z-10">
-                <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
-                    <i class="fas fa-file-signature text-emerald-200"></i> Hoja Padronal
-                </h3>
-                <div class="mb-5">
-                    <p class="text-xs text-emerald-50 leading-relaxed">
-                        Consulta cómo descargar y firmar correctamente la solicitud de empadronamiento.
-                    </p>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="openModal('modalHoja')"
-                            class="flex-1 min-w-[120px] text-[10px] bg-white text-emerald-700 px-3 py-3 rounded-xl font-bold active:scale-95 transition-all uppercase tracking-widest">
-                        <i class="fas fa-info-circle mr-1"></i> Ver Guía Padronal
-                    </button>
-                </div>
-            </div>
-            <i class="fas fa-map-marked-alt absolute -right-4 -bottom-4 text-white/10 text-8xl rotate-12"></i>
-        </div>
-
-        <div th:if="${tramite.id == 3}" class="bg-red-600 text-white p-6 rounded-[2rem] shadow-lg relative overflow-hidden">
-            <div class="relative z-10">
-                <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
-                    <i class="fas fa-subway text-red-200"></i> Pago de Tarjeta
-                </h3>
-                <div class="mb-5">
-                    <p class="text-xs text-red-50 leading-relaxed">
-                        Información sobre el costo de la tarjeta física y el método de pago en oficina.
-                    </p>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="openModal('modalAbono')"
-                            class="flex-1 min-w-[120px] text-[10px] bg-white text-red-600 px-3 py-3 rounded-xl font-bold active:scale-95 transition-all uppercase tracking-widest">
-                        <i class="fas fa-info-circle mr-1"></i> Detalles Pago
-                    </button>
-                </div>
-            </div>
-            <i class="fas fa-bus absolute -right-4 -bottom-4 text-white/10 text-8xl rotate-12"></i>
-        </div>
-
-        <div class="space-y-4">
+        <div class="space-y-3">
             <h3 class="text-lg font-black text-slate-800 px-1">Requisitos necesarios</h3>
-
-            <div th:each="doc : ${documentos}"
-                 th:id="'doc-' + ${doc.id}"
-                 class="bg-white p-5 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm scroll-mt-24 active:bg-slate-50 transition-colors">
-
+            <div th:each="doc : ${documentos}" th:id="'doc-' + ${doc.id}" class="bg-white p-5 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm scroll-mt-24">
                 <div class="flex items-center gap-4">
                     <form th:action="@{/documento/marcar/{id}(id=${doc.id})}" method="post">
                         <input type="hidden" name="anchor" th:value="'doc-' + ${doc.id}" />
-                        <button type="submit"
-                                th:class="${doc.marcado} ? 'w-8 h-8 rounded-xl bg-green-500 text-white flex items-center justify-center shadow-lg shadow-green-200' : 'w-8 h-8 rounded-xl border-2 border-slate-200 bg-white flex items-center justify-center transition-all'">
+                        <button type="submit" th:class="${doc.marcado} ? 'w-8 h-8 rounded-xl bg-green-500 text-white flex items-center justify-center' : 'w-8 h-8 rounded-xl border-2 border-slate-200 bg-white flex items-center justify-center'">
                             <i class="fas fa-check text-xs" th:if="${doc.marcado}"></i>
                         </button>
                     </form>
-
-                    <div class="max-w-[180px] sm:max-w-none">
-                        <p class="text-sm font-bold text-slate-800 leading-tight" th:text="${doc.nombre}">Nombre</p>
-                        <p class="text-[10px] text-slate-400 mt-1" th:text="${doc.descripcion}">Descripción</p>
+                    <div>
+                        <p class="text-sm font-bold text-slate-800" th:text="${doc.nombre}">Nombre</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5" th:text="${doc.descripcion}">Descripción</p>
                     </div>
                 </div>
-
-                <div class="text-right">
-                    <span class="text-[9px] font-black text-slate-400 bg-slate-50 px-2 py-1 rounded-md border border-slate-100 uppercase"
-                          th:text="${doc.costo}">Gratis</span>
-                </div>
+                <span class="text-[9px] font-black text-slate-400 bg-slate-50 px-2 py-1 rounded-md border border-slate-100 uppercase" th:text="${doc.costo}">Gratis</span>
             </div>
         </div>
     </main>
 
     <aside class="lg:col-span-3 space-y-6">
-        <div class="grid grid-cols-1 gap-3">
-            <a th:href="${tramite.urlCita}" target="_blank" class="block w-full bg-[#1e3a8a] text-white text-center py-4 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-all">
+        <div class="flex flex-col gap-3">
+            <a th:href="${tramite.urlCita}" target="_blank" class="w-full bg-[#1e3a8a] text-white text-center py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all">
                 <i class="fas fa-external-link-alt mr-2"></i> PEDIR CITA PREVIA
             </a>
-
-            <a th:href="@{/mis-citas}" class="block w-full bg-orange-500 text-white text-center py-4 rounded-2xl font-black text-sm shadow-lg active:scale-95 transition-all">
+            <a th:href="@{/mis-citas}" class="w-full bg-orange-500 text-white text-center py-4 rounded-2xl font-black text-xs shadow-lg active:scale-95 transition-all">
                 <i class="fas fa-calendar-check mr-2"></i> MI CALENDARIO
             </a>
         </div>
 
         <div class="bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm">
-            <h3 class="text-xs font-black text-slate-800 uppercase mb-4 tracking-[0.15em] flex items-center gap-2">
+            <h3 class="text-[10px] font-black text-slate-800 uppercase mb-4 tracking-widest flex items-center gap-2">
                 <i class="fas fa-lightbulb text-yellow-500"></i> Comunidad
             </h3>
             <div class="space-y-5" th:if="${not #lists.isEmpty(tramite.consejos)}">
                 <div th:each="c : ${tramite.consejos}" class="relative pl-4 border-l-2 border-blue-100">
-                    <p class="text-xs text-slate-600 italic leading-relaxed" th:text="'&quot;' + ${c.contenido} + '&quot;'"></p>
+                    <p class="text-[11px] text-slate-600 italic leading-relaxed" th:text="'&quot;' + ${c.contenido} + '&quot;'"></p>
                     <p class="text-[9px] font-black text-[#1e3a8a] mt-2 uppercase" th:text="${c.autor}"></p>
                 </div>
             </div>
+            <p th:unless="${not #lists.isEmpty(tramite.consejos)}" class="text-[10px] text-slate-400 italic">No hay consejos aún.</p>
         </div>
     </aside>
+
 </div>
 
-<!-- NAVEGACIÓN INFERIOR (Solo visible en Mobile) -->
 <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 px-8 py-3 flex justify-between items-center z-[100] shadow-2xl">
     <a th:href="@{/}" class="flex flex-col items-center text-slate-400"><i class="fas fa-home text-xl"></i><span class="text-[9px] font-bold mt-1">Inicio</span></a>
     <a th:href="@{/tramites}" class="flex flex-col items-center text-[#1e3a8a]"><i class="fas fa-file-invoice text-xl"></i><span class="text-[9px] font-black mt-1">Trámites</span></a>
     <a th:href="@{/sedes}" class="flex flex-col items-center text-slate-400"><i class="fas fa-map-marked-alt text-xl"></i><span class="text-[9px] font-bold mt-1">Sedes</span></a>
 </div>
 
-<!-- MODALES DE EXPLICACIÓN DETALLADA -->
-<div id="modalEX15" class="hidden fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-    <div class="bg-white rounded-[2.5rem] max-w-xl w-full overflow-hidden shadow-2xl">
-        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-            <h3 class="font-black text-slate-800 uppercase text-sm tracking-widest">Guía: Modelo EX-15</h3>
-            <button onclick="closeModal('modalEX15')" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
-        </div>
-        <div class="p-8 text-sm text-slate-600 space-y-4">
-            <p>Este es el formulario oficial para solicitar tu número de identidad. Rellénalo con mayúsculas de imprenta.</p>
-            <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100 text-xs text-blue-700 leading-relaxed">
-                <p><strong>💡 Consejo MadriLink:</strong></p>
-                <p class="mt-2">En el apartado 4.2 ("MOTIVOS"), marca la casilla <strong>"Por intereses económicos, profesionales o sociales"</strong> y especifica brevemente tu situación (ej. Apertura de cuenta bancaria o Estudios).</p>
-            </div>
-            <a href="https://www.we-pdf.com/es/editor?action=form&form=ex-15" target="_blank" class="block w-full bg-[#1e3a8a] text-white text-center py-4 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg shadow-blue-900/10">Descargar y Rellenar PDF</a>
-        </div>
-    </div>
-</div>
-
-<div id="modalTasa" class="hidden fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-    <div class="bg-white rounded-[2.5rem] max-w-xl w-full overflow-hidden shadow-2xl">
-        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-            <h3 class="font-black text-slate-800 uppercase text-sm tracking-widest">Guía: Tasa 790 Código 012</h3>
-            <button onclick="closeModal('modalTasa')" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
-        </div>
-        <div class="p-8 text-sm text-slate-600 space-y-4">
-            <p>Debes rellenarlo online, imprimirlo y llevarlo físicamente a cualquier banco para pagar (9,84 € aprox.).</p>
-            <div class="bg-amber-50 p-5 rounded-2xl border border-amber-100 text-xs text-amber-800 space-y-3 leading-relaxed shadow-inner">
-                <p><strong>Pasos para no equivocarte:</strong></p>
-                <ul class="list-decimal pl-4 space-y-2">
-                    <li>Rellena tus datos (NIE/Pasaporte, Nombre y Domicilio).</li>
-                    <li>En el apartado de "Tarifas", busca la sección de <strong>Documentos de identidad</strong>.</li>
-                    <li>Marca la casilla: <em>"Asignación de Número de Identidad de Extranjero (NIE) a instancia del interesado"</em>.</li>
-                    <li>Selecciona "En efectivo" al final e imprime las 3 copias generadas.</li>
-                </ul>
-            </div>
-            <a href="https://sede.policia.gob.es/Tasa790_012/ImpresoRellenar" target="_blank" class="block w-full bg-amber-500 text-white text-center py-4 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg shadow-amber-200">Ir al Formulario Oficial</a>
-        </div>
-    </div>
-</div>
-
-<div id="modalHoja" class="hidden fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-    <div class="bg-white rounded-[2.5rem] max-w-xl w-full overflow-hidden shadow-2xl">
-        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-            <h3 class="font-black text-slate-800 uppercase text-sm tracking-widest">Hoja Padronal (Madrid)</h3>
-            <button onclick="closeModal('modalHoja')" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
-        </div>
-        <div class="p-8 text-sm text-slate-600 space-y-4">
-            <p>Documento oficial necesario para el empadronamiento. Deben firmarlo todas las personas mayores de edad que vivan en el domicilio.</p>
-            <div class="bg-emerald-50 p-5 rounded-2xl border border-emerald-100 text-xs text-emerald-700 leading-relaxed">
-                <p><strong>💡 Importante:</strong></p>
-                <p class="mt-2">Si vives de alquiler, recuerda adjuntar copia del contrato de arrendamiento y el último recibo de alquiler pagado.</p>
-            </div>
-            <a href="https://sede.madrid.es/UnidadesDescentralizadas/UDCEstadistica/TramitesMunicipales/Ficheros/Hoja_padronal.pdf" target="_blank" class="block w-full bg-emerald-600 text-white text-center py-4 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg shadow-emerald-200">Descargar Hoja Padronal</a>
-        </div>
-    </div>
-</div>
-
-<div id="modalAbono" class="hidden fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-    <div class="bg-white rounded-[2.5rem] max-w-xl w-full overflow-hidden shadow-2xl">
-        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-            <h3 class="font-black text-slate-800 uppercase text-sm tracking-widest">Información de Pago: TTP</h3>
-            <button onclick="closeModal('modalAbono')" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
-        </div>
-        <div class="p-8 text-sm text-slate-600 space-y-4">
-            <p>La emisión de la tarjeta física tiene un costo fijo de <strong>4,00 €</strong>.</p>
-            <div class="bg-red-50 p-5 rounded-2xl border border-red-100 text-xs text-red-700 space-y-2 leading-relaxed">
-                <p><strong>Recuerda llevar a la cita:</strong></p>
-                <ul class="list-disc pl-4 space-y-1">
-                    <li>Pasaporte o NIE original.</li>
-                    <li>4,00 € (se puede pagar con tarjeta en la mayoría de oficinas de gestión).</li>
-                    <li>La foto te la suelen hacer en el momento de forma gratuita.</li>
-                </ul>
-            </div>
-            <a href="https://webttp.comunidad.madrid/CRTM-ABONOS/entrada.aspx" target="_blank" class="block w-full bg-red-600 text-white text-center py-4 rounded-2xl font-black uppercase tracking-widest text-xs">Web Oficial del Consorcio</a>
-        </div>
-    </div>
-</div>
-
 <script>
-    function openModal(id) {
-        document.getElementById(id).classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeModal(id) {
-        document.getElementById(id).classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.body.style.overflow = 'auto'; }
 </script>
 
 </body>

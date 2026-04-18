@@ -8,13 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
         body::-webkit-scrollbar { display: none; }
+        .fab-button { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .fab-button:active { transform: scale(0.9); }
     </style>
 </head>
 <body class="min-h-screen pb-24 lg:pb-12">
 
-<!-- NAVEGACIÓN SUPERIOR (Consistente con Index) -->
+<!-- NAVEGACIÓN SUPERIOR -->
 <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -44,70 +46,73 @@
 </nav>
 
 <main class="max-w-xl mx-auto px-4 py-8">
-    <!-- Encabezado -->
-    <div class="text-center mb-10">
-        <h1 class="text-3xl font-black text-[#1e3a8a] tracking-tight">👥 Muro de la Comunidad</h1>
-        <p class="text-sm text-slate-500 mt-2">Experiencias y consejos de otros estudiantes en Madrid.</p>
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-black text-slate-800 tracking-tight">Muro de la Comunidad</h1>
+        <p class="text-xs text-slate-500 mt-2 font-medium uppercase tracking-widest">Consejos de estudiantes reales</p>
     </div>
 
-    <!-- 1. FEED DE MENSAJES (Ahora primero) -->
-    <div class="space-y-4 mb-12">
-        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-2">Últimos consejos</h3>
-
-        <div th:each="c : ${consejos}" class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm active:scale-[0.99] transition-transform">
+    <!-- 1. FEED DE MENSAJES (PRIMERO) -->
+    <div class="space-y-6 mb-12">
+        <div th:each="c : ${consejos}" class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm active:scale-[0.99] transition-transform">
             <div class="flex justify-between items-center mb-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 bg-blue-50 rounded-2xl flex items-center justify-center text-[#1e3a8a] font-bold text-sm"
+                    <div class="w-10 h-10 bg-blue-50 rounded-2xl flex items-center justify-center text-[#1e3a8a] font-black text-sm"
                          th:text="${#strings.substring(c.autor,0,1)}">U</div>
                     <div>
-                        <span class="block font-black text-slate-800 text-sm leading-none" th:text="${c.autor}">Nombre</span>
-                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">Usuario MadriLink</span>
+                        <span class="block font-black text-slate-800 text-sm leading-tight" th:text="${c.autor}">Nombre</span>
+                        <span class="text-[9px] text-blue-500 font-bold uppercase tracking-tighter">Estudiante Madrid</span>
                     </div>
                 </div>
-                <span class="text-[9px] font-black bg-blue-50 text-blue-600 px-3 py-1 rounded-full uppercase border border-blue-100"
+                <span class="text-[9px] font-black bg-slate-50 text-slate-400 px-3 py-1.5 rounded-full uppercase border border-slate-100"
                       th:text="${c.tramite?.titulo}">Trámite</span>
             </div>
             <p class="text-sm text-slate-600 leading-relaxed italic" th:text="'&quot;' + ${c.contenido} + '&quot;'"></p>
         </div>
 
-        <!-- Mensaje si no hay contenido -->
         <div th:if="${#lists.isEmpty(consejos)}" class="text-center py-10 bg-white rounded-[2rem] border border-dashed border-slate-200">
-            <p class="text-slate-400 text-sm">Sé el primero en compartir un consejo.</p>
+            <p class="text-slate-400 text-sm italic">No hay consejos todavía. ¡Sé el primero!</p>
         </div>
     </div>
 
-    <!-- 2. CAJA PARA PUBLICAR (Ahora después de los mensajes) -->
-    <div class="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-blue-900/5 border border-slate-100">
-        <h3 class="font-black text-slate-800 mb-6 flex items-center gap-2">
-            <i class="fas fa-comment-dots text-blue-500"></i> ¿Quieres ayudar a otros?
-        </h3>
-        <form th:action="@{/comunidad/publicar}" th:object="${nuevoConsejo}" method="post" class="space-y-4">
+    <!-- 2. CAJA PARA PUBLICAR (DESPUÉS) -->
+    <div id="publish-box" class="bg-white p-8 rounded-[3rem] shadow-2xl shadow-blue-900/10 border border-slate-100 scroll-mt-24">
+        <div class="flex items-center gap-3 mb-6 text-[#1e3a8a]">
+            <i class="fas fa-edit text-xl"></i>
+            <h3 class="font-black text-slate-800 text-lg">Escribe tu consejo</h3>
+        </div>
+
+        <form th:action="@{/comunidad/publicar}" th:object="${nuevoConsejo}" method="post" class="space-y-5">
             <div>
-                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tu Nombre</label>
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Tu Nombre</label>
                 <input type="text" th:field="*{autor}" placeholder="Ej: Carolina"
                        class="w-full mt-1 p-4 bg-slate-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none" required>
             </div>
 
             <div>
-                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sobre qué trámite</label>
-                <select name="tramiteId" class="w-full mt-1 p-4 bg-slate-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none" required>
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Trámite relacionado</label>
+                <select name="tramiteId" class="w-full mt-1 p-4 bg-slate-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none appearance-none" required>
                     <option value="" disabled selected>Selecciona una opción...</option>
                     <option th:each="t : ${todosLosTramites}" th:value="${t.id}" th:text="${t.titulo}"></option>
                 </select>
             </div>
 
             <div>
-                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tu Experiencia</label>
-                <textarea th:field="*{contenido}" rows="3" placeholder="Escribe tu consejo aquí..."
+                <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">¿Qué consejo darías?</label>
+                <textarea th:field="*{contenido}" rows="3" placeholder="Escribe aquí tu experiencia..."
                           class="w-full mt-1 p-4 bg-slate-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none" required></textarea>
             </div>
 
-            <button type="submit" class="w-full bg-[#1e3a8a] text-white py-4 rounded-2xl font-black text-xs shadow-lg shadow-blue-900/10 active:scale-95 transition-all uppercase tracking-widest">
-                PUBLICAR CONSEJO
+            <button type="submit" class="w-full bg-[#1e3a8a] text-white py-4 rounded-2xl font-black text-xs shadow-lg shadow-blue-900/10 active:scale-95 transition-all uppercase tracking-[0.15em]">
+                COMPARTIR CON LA COMUNIDAD
             </button>
         </form>
     </div>
 </main>
+
+<!-- BOTÓN FLOTANTE (Solo Mobile) -->
+<a href="#publish-box" class="md:hidden fixed bottom-24 right-6 w-14 h-14 bg-[#1e3a8a] text-white rounded-full flex items-center justify-center shadow-xl z-50 fab-button border-4 border-white">
+    <i class="fas fa-pen text-lg"></i>
+</a>
 
 <!-- NAVEGACIÓN INFERIOR (Mobile) -->
 <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center z-[100] shadow-2xl">

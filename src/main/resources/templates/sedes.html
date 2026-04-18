@@ -11,19 +11,29 @@
         :root { --primary: #1e3a8a; --bg: #f8fafc; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: #333; }
 
-        /* Estilos del diseño anterior integrados */
-        .search-box { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; gap: 10px; }
-        .search-box input { flex: 1; padding: 12px; border: 1px solid #eee; border-radius: 12px; outline: none; transition: 0.3s; }
-        .search-box input:focus { border-color: var(--primary); ring: 2px; ring-color: #1e3a8a22; }
-        .btn-buscar { background: var(--primary); color: white; border: none; padding: 10px 25px; border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        /* AJUSTE PARA BUSCADOR EN MÓVIL */
+        .search-box { background: white; padding: 15px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; gap: 8px; flex-wrap: wrap; }
+        .search-box input { flex: 1; min-width: 150px; padding: 12px; border: 1px solid #eee; border-radius: 12px; outline: none; transition: 0.3s; font-size: 14px; }
+        .search-box input:focus { border-color: var(--primary); }
+        .btn-buscar { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; width: auto; flex-shrink: 0; }
 
-        .grid-sedes { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px; }
+        /* AJUSTE CLAVE: Responsividad del Grid */
+        .grid-sedes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
 
-        /* Tarjeta con borde superior azul */
-        .sede-card { background: white; padding: 24px; border-radius: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.03); border-top: 6px solid var(--primary); transition: 0.3s; display: flex; flex-direction: column; }
+        /* En pantallas muy pequeñas (menos de 350px) permitimos que baje a menos de 280px */
+        @media (max-width: 380px) {
+            .grid-sedes { grid-template-columns: 1fr; }
+        }
+
+        .sede-card { background: white; padding: 24px; border-radius: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.03); border-top: 6px solid var(--primary); transition: 0.3s; display: flex; flex-direction: column; height: 100%; }
         .sede-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.06); }
         .sede-card h3 { margin-top: 0; color: var(--primary); font-size: 1.1em; font-weight: 800; }
-        .info-item { font-size: 0.85em; margin: 10px 0; color: #64748b; line-height: 1.5; }
+        .info-item { font-size: 0.85em; margin: 10px 0; color: #64748b; line-height: 1.5; word-wrap: break-word; }
         .info-item strong { color: #334155; }
 
         .btn-mapa { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto; padding: 12px; background: #4285F4; color: white; text-decoration: none; border-radius: 12px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; transition: 0.3s; }
@@ -34,13 +44,12 @@
 </head>
 <body class="min-h-screen pb-24 lg:pb-12">
 
-<!-- NAVEGACIÓN SUPERIOR (Limpia y con orden correcto) -->
 <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <div class="flex-shrink-0 flex items-center">
-                    <img th:src="@{/images/logo4.png}" alt="Logo" class="h-10 w-auto object-contain">
+                    <img th:src="@{/images/logo4.png}" alt="Logo" class="h-8 md:h-10 w-auto object-contain">
                 </div>
                 <div class="hidden md:ml-10 md:flex md:space-x-8 h-full">
                     <a th:href="@{/}" class="text-slate-500 hover:text-slate-800 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors">Inicio</a>
@@ -56,10 +65,10 @@
             <div class="flex items-center gap-4">
                 <div th:if="${#authorization.expression('isAuthenticated()')}" class="flex items-center gap-3">
                     <img th:src="'https://ui-avatars.com/api/?name=' + ${#authentication.name} + '&background=1e3a8a&color=fff'"
-                         class="h-9 w-9 rounded-xl border-2 border-white shadow-sm">
+                         class="h-8 w-8 md:h-9 md:w-9 rounded-xl border-2 border-white shadow-sm">
                 </div>
                 <div th:unless="${#authorization.expression('isAuthenticated()')}">
-                    <a th:href="@{/login}" class="bg-[#1e3a8a] text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest">Login</a>
+                    <a th:href="@{/login}" class="bg-[#1e3a8a] text-white px-4 py-2 rounded-xl font-black text-[9px] uppercase tracking-widest">Login</a>
                 </div>
             </div>
         </div>
@@ -68,23 +77,21 @@
 
 <main class="max-w-6xl mx-auto px-4 py-8">
     <div class="text-center mb-10">
-        <h1 class="text-3xl font-black text-slate-800 tracking-tight">📍 Directorio de Sedes</h1>
-        <p class="text-sm text-slate-500 mt-2 font-medium">Busca la oficina más cercana para realizar tus trámites sin complicaciones.</p>
+        <h1 class="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">Directorio de Sedes</h1>
+        <p class="text-[13px] md:text-sm text-slate-500 mt-2 font-medium">Busca la oficina más cercana para realizar tus trámites.</p>
     </div>
 
-    <!-- BUSCADOR (Diseño anterior) -->
     <form th:action="@{/sedes/buscar}" method="get" class="search-box max-w-2xl mx-auto mb-10">
-        <input type="text" name="q" placeholder="Ej: Pradillo, Comisaría, Aluche..." th:value="${param.q}">
-        <button type="submit" class="btn-buscar">Buscar</button>
+        <input type="text" name="q" placeholder="Ej: Pradillo, Aluche..." th:value="${param.q}">
+        <button type="submit" class="btn-buscar">BUSCAR</button>
     </form>
 
-    <!-- GRID DE SEDES (Diseño anterior con tarjetas) -->
     <div class="grid-sedes">
         <div th:each="sede : ${sedes}" class="sede-card">
             <h3 th:text="${sede.nombre}">Nombre de la Sede</h3>
 
             <div class="info-item">
-                <strong>📍 Dirección:</strong><br>
+                <strong>Dirección:</strong><br>
                 <span th:text="${sede.direccion}">Calle Ejemplo, 12</span>
             </div>
 
@@ -105,12 +112,11 @@
         </div>
     </div>
 
-    <!-- MENSAJE VACÍO -->
-    <div th:if="${#lists.isEmpty(sedes)}" class="text-center py-20">
-        <div class="bg-white inline-block p-10 rounded-[3rem] shadow-sm border border-slate-100">
+    <div th:if="${#lists.isEmpty(sedes)}" class="text-center py-20 px-4">
+        <div class="bg-white inline-block p-10 rounded-[2.5rem] shadow-sm border border-slate-100 w-full max-w-sm">
             <i class="fas fa-search text-slate-200 text-5xl mb-4 block"></i>
-            <p class="text-slate-400 font-bold">No se encontraron oficinas. Intenta con otra palabra.</p>
-            <a th:href="@{/sedes}" class="text-[#1e3a8a] text-xs font-black uppercase mt-4 inline-block hover:underline">Ver todas las sedes</a>
+            <p class="text-slate-400 font-bold">No se encontraron oficinas.</p>
+            <a th:href="@{/sedes}" class="text-[#1e3a8a] text-xs font-black uppercase mt-4 inline-block hover:underline">Ver todas</a>
         </div>
     </div>
 
@@ -121,7 +127,6 @@
     </div>
 </main>
 
-<!-- NAVEGACIÓN INFERIOR (Mobile) -->
 <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center z-[100] shadow-2xl">
     <a th:href="@{/}" class="flex flex-col items-center text-slate-400">
         <i class="fas fa-home text-xl"></i>
