@@ -7,43 +7,52 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         :root { --primary: #1e3a8a; --bg: #f8fafc; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); }
-        .nav-link-active { border-bottom: 2px solid var(--primary); color: var(--primary); }
+        /* Ocultar barra de scroll en móviles */
+        body::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="text-slate-900 min-h-screen">
+<body class="text-slate-900 min-h-screen pb-24 lg:pb-8">
 
-<nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+<!-- NAVEGACIÓN SUPERIOR CORREGIDA -->
+<nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <div class="flex-shrink-0 flex items-center">
-                    <img th:src="@{/images/logo4.png}" alt="Logo" class="h-16 w-auto object-contain">
+                    <!-- Solo la imagen del logo, sin el texto azul/negro para un look más limpio -->
+                    <img th:src="@{/images/logo4.png}" alt="Logo" class="h-10 w-auto object-contain">
                 </div>
-                <div class="hidden sm:ml-8 sm:flex sm:space-x-8 h-full">
-                    <a th:href="@{/}" class="nav-link-active inline-flex items-center px-1 pt-1 text-sm font-medium">Dashboard</a>
-                    <a th:href="@{/tramites}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Trámites</a>
-                    <a th:href="@{/sedes}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Sedes</a>
-                    <a th:href="@{/comunidad}" class="text-slate-500 hover:text-slate-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Comunidad</a>
+                <!-- Menú Desktop: Orden corregido (Inicio, Trámites, Sedes, Comunidad, Mis Citas) -->
+                <div class="hidden md:ml-10 md:flex md:space-x-8 h-full">
+                    <a th:href="@{/}" class="border-b-2 border-[#1e3a8a] text-[#1e3a8a] inline-flex items-center px-1 pt-1 text-sm font-bold transition-all">Inicio</a>
+                    <a th:href="@{/tramites}" class="text-slate-500 hover:text-slate-800 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors">Trámites</a>
+                    <a th:href="@{/sedes}" class="text-slate-500 hover:text-slate-800 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors">Sedes</a>
+                    <a th:href="@{/comunidad}" class="text-slate-500 hover:text-slate-800 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors">Comunidad</a>
                     <a th:href="@{/mis-citas}" class="text-slate-500 hover:text-[#1e3a8a] inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors">
-                        <i class="fas fa-calendar-alt mr-2"></i> Mis Citas
+                        <i class="fas fa-calendar-alt mr-2 text-xs"></i> Mis Citas
                     </a>
                 </div>
             </div>
-            <div class="flex items-center gap-4">
-                <div th:if="${#authorization.expression('isAuthenticated()')}" class="flex items-center gap-3">
+
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- Bloque cuando el usuario ESTÁ logueado -->
+                <div th:if="${#authorization.expression('isAuthenticated()')}" class="flex items-center gap-2 sm:gap-3">
                     <div class="text-right hidden sm:block">
-                        <p class="text-xs font-bold text-slate-800" th:text="${#authentication.name}">usuario@email.com</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter" th:text="${#authentication.name}">Usuario</p>
                         <form th:action="@{/logout}" method="post">
-                            <button type="submit" class="text-[10px] text-red-500 font-bold uppercase hover:underline">Cerrar Sesión</button>
+                            <button type="submit" class="text-[10px] text-red-500 font-black hover:underline uppercase">Cerrar Sesión</button>
                         </form>
                     </div>
-                    <img th:src="'https://ui-avatars.com/api/?name=' + ${#authentication.name} + '&background=1e3a8a&color=fff'" class="h-8 w-8 rounded-full border border-slate-200">
+                    <img th:src="'https://ui-avatars.com/api/?name=' + ${#authentication.name} + '&background=1e3a8a&color=fff'"
+                         class="h-9 w-9 rounded-xl border-2 border-white shadow-sm">
                 </div>
+
+                <!-- Bloque cuando NO hay nadie logueado -->
                 <div th:unless="${#authorization.expression('isAuthenticated()')}">
-                    <a th:href="@{/login}" class="text-sm font-bold text-[#1e3a8a] bg-blue-50 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors">
+                    <a th:href="@{/login}" class="bg-[#1e3a8a] text-white px-5 py-2.5 rounded-xl font-black text-[10px] shadow-lg shadow-blue-900/10 active:scale-95 transition-all uppercase tracking-widest">
                         Iniciar Sesión
                     </a>
                 </div>
@@ -52,82 +61,127 @@
     </div>
 </nav>
 
-<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-8 bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-        <div class="bg-[#1e3a8a] py-8 flex justify-center shadow-inner">
-            <img th:src="@{/images/logo.png}" alt="Logo MadriLink" class="h-32 w-auto drop-shadow-2xl">
+    <!-- HEADER HERO -->
+    <div class="mb-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+        <div class="bg-[#1e3a8a] py-6 flex justify-center shadow-inner relative overflow-hidden">
+            <img th:src="@{/images/logo.png}" alt="Logo Hero" class="h-24 md:h-32 w-auto drop-shadow-2xl relative z-10">
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/5 rounded-full"></div>
+            <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full"></div>
         </div>
 
-        <div class="p-8">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-                <div class="text-left">
-                    <h1 class="text-3xl font-bold text-slate-900 mb-1">Bienvenido a Madrid 👋</h1>
-                    <p class="text-slate-500 font-medium text-base">Gestiona tus trámites de extranjería fácilmente.</p>
+        <div class="p-6 md:p-8">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-end gap-4 text-center md:text-left">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-black text-slate-900 mb-1 leading-tight">¡Bienvenido a Madrid! 👋</h1>
+                    <p class="text-slate-500 font-medium text-sm md:text-base">Tu guía paso a paso para trámites de extranjería.</p>
                 </div>
-                <div class="bg-blue-50 px-6 py-2 rounded-2xl text-center min-w-[140px]">
-                    <span class="text-3xl font-black text-[#1e3a8a]" th:text="${progresoGlobal} + '%'">0%</span>
-                    <span class="text-[10px] font-bold text-[#1e3a8a] block uppercase tracking-wider">Tu Progreso</span>
+                <div class="bg-blue-50 px-6 py-3 rounded-2xl text-center w-full md:w-auto border border-blue-100 shadow-sm">
+                    <span class="text-3xl font-black text-[#1e3a8a] block" th:text="${progresoGlobal} + '%'">0%</span>
+                    <span class="text-[10px] font-bold text-[#1e3a8a] uppercase tracking-widest">Progreso Global</span>
                 </div>
             </div>
 
-            <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden mt-6 border border-slate-50">
-                <div class="bg-[#1e3a8a] h-full transition-all duration-1000" th:style="'width:' + ${progresoGlobal} + '%'"></div>
+            <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden mt-6 shadow-inner">
+                <div class="bg-gradient-to-r from-blue-800 to-blue-500 h-full transition-all duration-1000"
+                     th:style="'width:' + ${progresoGlobal} + '%'"></div>
             </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="md:col-span-2 space-y-4">
-            <h3 id="seccion-tramites" class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <i class="fas fa-tasks text-[#1e3a8a]"></i> Trámites Disponibles
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- SECCIÓN DE TRÁMITES -->
+        <div class="lg:col-span-2 space-y-4">
+            <h3 class="text-lg font-black text-slate-800 flex items-center gap-2 px-1 uppercase tracking-widest text-[10px]">
+                <i class="fas fa-rocket text-[#1e3a8a]"></i> Pasos recomendados
             </h3>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div th:each="tramite : ${tramites}" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-                    <div class="flex justify-between items-start mb-3">
-                        <span class="text-[10px] font-bold uppercase px-2 py-1 bg-blue-50 text-[#1e3a8a] rounded-md" th:text="${tramite.plazo}">Plazo</span>
-                        <i class="fas fa-chevron-right text-slate-300"></i>
+                <div th:each="tramite : ${tramites}"
+                     class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100 hover:border-blue-200 transition-all active:scale-[0.98]">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[9px] font-bold uppercase px-3 py-1 bg-blue-50 text-[#1e3a8a] rounded-full border border-blue-100"
+                              th:text="${tramite.plazo}">Plazo</span>
+                        <div class="w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center text-slate-300">
+                            <i class="fas fa-chevron-right text-xs"></i>
+                        </div>
                     </div>
-                    <h4 class="font-bold text-slate-900 mb-1" th:text="${tramite.titulo}">Nombre</h4>
-                    <p class="text-xs text-slate-500 mb-4 line-clamp-2" th:text="${tramite.descripcion}"></p>
-                    <a th:href="@{/tramite/{id}(id=${tramite.id})}" class="inline-block w-full text-center py-2 bg-[#1e3a8a] text-white text-sm font-bold rounded-lg hover:bg-blue-900 transition-colors">
-                        Ver Documentos
+                    <h4 class="font-black text-slate-900 text-lg mb-1 leading-tight" th:text="${tramite.titulo}">Nombre</h4>
+                    <p class="text-xs text-slate-500 mb-6 line-clamp-2 leading-relaxed" th:text="${tramite.descripcion}"></p>
+
+                    <a th:href="@{/tramite/{id}(id=${tramite.id})}"
+                       class="flex items-center justify-center gap-2 w-full py-3 bg-[#1e3a8a] text-white text-[10px] font-black rounded-xl shadow-lg shadow-blue-900/10 active:bg-blue-900 tracking-widest uppercase">
+                        Gestionar
                     </a>
                 </div>
             </div>
         </div>
 
+        <!-- BARRA LATERAL -->
         <div class="space-y-6">
-            <div class="bg-[#1e3a8a] p-6 rounded-2xl text-white shadow-lg shadow-blue-900/20">
-                <h3 class="font-bold text-lg mb-2">Comunidad</h3>
-                <p class="text-blue-100 text-sm mb-4">¿Dudas con la cita previa? Lee los consejos de otros usuarios.</p>
-                <a th:href="@{/comunidad}" class="block text-center py-2 bg-white text-[#1e3a8a] font-bold rounded-lg text-sm">
-                    Ir al Foro
-                </a>
+            <!-- Comunidad -->
+            <div class="bg-gradient-to-br from-[#1e3a8a] to-blue-900 p-6 rounded-[2rem] text-white shadow-xl relative overflow-hidden group">
+                <div class="relative z-10">
+                    <h3 class="font-black text-xl mb-2 flex items-center gap-2">
+                        <i class="fas fa-users text-blue-300"></i> Comunidad
+                    </h3>
+                    <p class="text-blue-100 text-xs mb-6 opacity-90 leading-relaxed">Resuelve tus dudas con consejos reales de otros estudiantes.</p>
+                    <a th:href="@{/comunidad}" class="block w-full text-center py-3 bg-white text-[#1e3a8a] font-black rounded-xl text-[10px] active:scale-95 transition-transform uppercase tracking-widest">
+                        Entrar al Foro
+                    </a>
+                </div>
+                <i class="fas fa-comments absolute -right-6 -bottom-6 text-white/10 text-8xl group-hover:rotate-12 transition-transform"></i>
             </div>
 
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h3 class="font-bold text-slate-800 mb-4">Sedes Recomendadas</h3>
+            <!-- Sedes -->
+            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
+                <h3 class="font-black text-slate-800 mb-4 flex items-center gap-2 uppercase text-[10px] tracking-widest">
+                    <i class="fas fa-map-pin text-red-500"></i> Oficinas Oficiales
+                </h3>
                 <div class="space-y-4">
-                    <div th:each="s : ${sedesInicio}" class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-xl transition-colors">
-                        <div class="p-2 bg-blue-50 rounded-lg text-[#1e3a8a]">
-                            <i class="fas fa-building"></i>
+                    <div th:each="s : ${sedesInicio}" class="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl hover:bg-blue-50 transition-colors cursor-pointer">
+                        <div class="w-10 h-10 flex-shrink-0 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#1e3a8a]">
+                            <i class="fas fa-building text-sm"></i>
                         </div>
-                        <div>
-                            <p class="text-sm font-bold text-slate-800" th:text="${s.nombre}">Nombre de la Sede</p>
-                            <p class="text-[10px] text-slate-500 uppercase tracking-tight" th:text="${s.direccion}">Dirección</p>
+                        <div class="min-w-0">
+                            <p class="text-xs font-black text-slate-800 truncate" th:text="${s.nombre}">Sede</p>
+                            <p class="text-[9px] text-slate-400 font-bold truncate uppercase" th:text="${s.direccion}">Dirección</p>
                         </div>
                     </div>
-                    <p th:if="${#lists.isEmpty(sedesInicio)}" class="text-xs text-slate-400 italic">
-                        No hay sedes disponibles.
-                    </p>
                 </div>
-                <a th:href="@{/sedes}" class="block mt-6 text-center text-sm font-bold text-[#1e3a8a] hover:underline">
-                    Ver directorio completo →
+                <!-- Enlace al directorio de sedes -->
+                <a th:href="@{/sedes}" class="block mt-6 text-center text-[10px] font-black text-[#1e3a8a] hover:bg-blue-50 py-2 rounded-lg transition-colors uppercase tracking-widest">
+                    Ver Directorio →
                 </a>
             </div>
         </div>
     </div>
 </main>
+
+<!-- NAVEGACIÓN INFERIOR (Móvil) - ORDEN CORREGIDO -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center z-[100] shadow-2xl">
+    <a th:href="@{/}" class="flex flex-col items-center text-[#1e3a8a]">
+        <i class="fas fa-home text-xl"></i>
+        <span class="text-[9px] font-black mt-1">Inicio</span>
+    </a>
+    <a th:href="@{/tramites}" class="flex flex-col items-center text-slate-400">
+        <i class="fas fa-file-invoice text-xl"></i>
+        <span class="text-[9px] font-bold mt-1">Trámites</span>
+    </a>
+    <a th:href="@{/sedes}" class="flex flex-col items-center text-slate-400">
+        <i class="fas fa-map-marked-alt text-xl"></i>
+        <span class="text-[9px] font-bold mt-1">Sedes</span>
+    </a>
+    <a th:href="@{/comunidad}" class="flex flex-col items-center text-slate-400">
+        <i class="fas fa-users text-xl"></i>
+        <span class="text-[9px] font-bold mt-1">Foro</span>
+    </a>
+    <a th:href="@{/mis-citas}" class="flex flex-col items-center text-slate-400">
+        <i class="fas fa-calendar-check text-xl"></i>
+        <span class="text-[9px] font-bold mt-1">Citas</span>
+    </a>
+</div>
+
 </body>
 </html>

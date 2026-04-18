@@ -1,110 +1,137 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>MadriLink - Comunidad</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MadriLink | Comunidad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #1e3a8a; --bg: #f8fafc; --text: #334155; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 40px 20px; margin: 0; }
-        .container { max-width: 700px; margin: auto; }
-
-        /* Estilo de las tarjetas de consejos */
-        .post {
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            border: 1px solid #e2e8f0;
-            transition: transform 0.2s;
-        }
-        .post:hover { transform: translateY(-2px); }
-
-        .author { font-weight: 800; color: var(--primary); display: flex; align-items: center; justify-content: space-between; }
-        .author-info { display: flex; align-items: center; gap: 10px; }
-
-        .tag { font-size: 0.75rem; background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: 999px; font-weight: 600; }
-
-        /* Formulario */
-        .form-card {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            border-bottom: 5px solid var(--primary);
-        }
-        textarea, input, select {
-            width: 100%;
-            padding: 14px;
-            margin-top: 8px;
-            border: 1px solid #cbd5e1;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-            font-family: inherit;
-            font-size: 1rem;
-        }
-        textarea:focus, input:focus, select:focus { outline: 2px solid #93c5fd; border-color: transparent; }
-
-        .btn-submit {
-            width: 100%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-submit:hover { background: #1e40af; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3); }
-
-        .back-link { display: inline-block; margin-top: 30px; color: #64748b; text-decoration: none; font-weight: 600; transition: color 0.2s; }
-        .back-link:hover { color: var(--primary); }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        body::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body>
-<div class="container">
-    <div style="text-align: center; margin-bottom: 40px;">
-        <h1 style="color: var(--primary); font-size: 2.5rem; font-weight: 800; margin-bottom: 10px;">👥 Comunidad MadriLink</h1>
-        <p style="color: #64748b;">Comparte tu experiencia y ayuda a otros con sus trámites en Madrid.</p>
-    </div>
+<body class="min-h-screen pb-24 lg:pb-12">
 
-    <div th:each="c : ${consejos}" class="post">
-        <div class="author">
-            <div class="author-info">
-                <span style="font-size: 1.2rem;">👤</span>
-                <span th:text="${c.autor}">Nombre</span>
+<!-- NAVEGACIÓN SUPERIOR (Consistente con Index) -->
+<nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <img th:src="@{/images/logo4.png}" alt="Logo" class="h-10 w-auto object-contain">
+                </div>
+                <div class="hidden md:ml-10 md:flex md:space-x-8 h-full">
+                    <a th:href="@{/}" class="text-slate-500 hover:text-slate-800 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors">Inicio</a>
+                    <a th:href="@{/tramites}" class="text-slate-500 hover:text-slate-800 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors">Trámites</a>
+                    <a th:href="@{/sedes}" class="text-slate-500 hover:text-slate-800 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors">Sedes</a>
+                    <a th:href="@{/comunidad}" class="border-b-2 border-[#1e3a8a] text-[#1e3a8a] inline-flex items-center px-1 pt-1 text-sm font-bold">Comunidad</a>
+                    <a th:href="@{/mis-citas}" class="text-slate-500 hover:text-[#1e3a8a] inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors">
+                        <i class="fas fa-calendar-alt mr-2 text-xs"></i> Mis Citas
+                    </a>
+                </div>
             </div>
-            <span class="tag" th:if="${c.tramite != null}" th:text="${c.tramite.titulo}">Trámite</span>
+
+            <div class="flex items-center gap-4">
+                <div th:if="${#authorization.expression('isAuthenticated()')}" class="flex items-center gap-3">
+                    <img th:src="'https://ui-avatars.com/api/?name=' + ${#authentication.name} + '&background=1e3a8a&color=fff'"
+                         class="h-9 w-9 rounded-xl border-2 border-white shadow-sm">
+                </div>
+            </div>
         </div>
-        <p th:text="${c.contenido}" style="margin-top: 15px; line-height: 1.6; font-size: 1.05rem;"></p>
+    </div>
+</nav>
+
+<main class="max-w-xl mx-auto px-4 py-8">
+    <!-- Encabezado -->
+    <div class="text-center mb-10">
+        <h1 class="text-3xl font-black text-[#1e3a8a] tracking-tight">👥 Muro de la Comunidad</h1>
+        <p class="text-sm text-slate-500 mt-2">Experiencias y consejos de otros estudiantes en Madrid.</p>
     </div>
 
-    <div class="form-card">
-        <h3 style="margin-top:0; color: #1e293b; font-size: 1.3rem;">💡 ¿Tienes un consejo?</h3>
-        <form th:action="@{/comunidad/publicar}" th:object="${nuevoConsejo}" method="post">
-            <label style="font-size: 0.9rem; font-weight: 600; color: #475569;">Tu nombre o apodo</label>
-            <input type="text" th:field="*{autor}" placeholder="Ej: Juan M." required>
+    <!-- 1. FEED DE MENSAJES (Ahora primero) -->
+    <div class="space-y-4 mb-12">
+        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-2">Últimos consejos</h3>
 
-            <label style="font-size: 0.9rem; font-weight: 600; color: #475569;">Sobre qué trámite es el consejo</label>
-            <select name="tramiteId" required>
-                <option value="" disabled selected>Selecciona un trámite...</option>
-                <option th:each="t : ${todosLosTramites}" th:value="${t.id}" th:text="${t.titulo}"></option>
-            </select>
+        <div th:each="c : ${consejos}" class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm active:scale-[0.99] transition-transform">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-blue-50 rounded-2xl flex items-center justify-center text-[#1e3a8a] font-bold text-sm"
+                         th:text="${#strings.substring(c.autor,0,1)}">U</div>
+                    <div>
+                        <span class="block font-black text-slate-800 text-sm leading-none" th:text="${c.autor}">Nombre</span>
+                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">Usuario MadriLink</span>
+                    </div>
+                </div>
+                <span class="text-[9px] font-black bg-blue-50 text-blue-600 px-3 py-1 rounded-full uppercase border border-blue-100"
+                      th:text="${c.tramite?.titulo}">Trámite</span>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed italic" th:text="'&quot;' + ${c.contenido} + '&quot;'"></p>
+        </div>
 
-            <label style="font-size: 0.9rem; font-weight: 600; color: #475569;">Tu mensaje</label>
-            <textarea th:field="*{contenido}" rows="4" placeholder="Escribe aquí los pasos o tips que te ayudaron..." required></textarea>
+        <!-- Mensaje si no hay contenido -->
+        <div th:if="${#lists.isEmpty(consejos)}" class="text-center py-10 bg-white rounded-[2rem] border border-dashed border-slate-200">
+            <p class="text-slate-400 text-sm">Sé el primero en compartir un consejo.</p>
+        </div>
+    </div>
 
-            <button type="submit" class="btn-submit">Publicar en la comunidad</button>
+    <!-- 2. CAJA PARA PUBLICAR (Ahora después de los mensajes) -->
+    <div class="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-blue-900/5 border border-slate-100">
+        <h3 class="font-black text-slate-800 mb-6 flex items-center gap-2">
+            <i class="fas fa-comment-dots text-blue-500"></i> ¿Quieres ayudar a otros?
+        </h3>
+        <form th:action="@{/comunidad/publicar}" th:object="${nuevoConsejo}" method="post" class="space-y-4">
+            <div>
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tu Nombre</label>
+                <input type="text" th:field="*{autor}" placeholder="Ej: Carolina"
+                       class="w-full mt-1 p-4 bg-slate-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none" required>
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sobre qué trámite</label>
+                <select name="tramiteId" class="w-full mt-1 p-4 bg-slate-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none" required>
+                    <option value="" disabled selected>Selecciona una opción...</option>
+                    <option th:each="t : ${todosLosTramites}" th:value="${t.id}" th:text="${t.titulo}"></option>
+                </select>
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tu Experiencia</label>
+                <textarea th:field="*{contenido}" rows="3" placeholder="Escribe tu consejo aquí..."
+                          class="w-full mt-1 p-4 bg-slate-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none" required></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-[#1e3a8a] text-white py-4 rounded-2xl font-black text-xs shadow-lg shadow-blue-900/10 active:scale-95 transition-all uppercase tracking-widest">
+                PUBLICAR CONSEJO
+            </button>
         </form>
     </div>
+</main>
 
-    <div style="text-align:center;">
-        <a th:href="@{/}" class="back-link">← Volver al panel de trámites</a>
-    </div>
+<!-- NAVEGACIÓN INFERIOR (Mobile) -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center z-[100] shadow-2xl">
+    <a th:href="@{/}" class="flex flex-col items-center text-slate-400">
+        <i class="fas fa-home text-xl"></i>
+        <span class="text-[9px] font-bold mt-1">Inicio</span>
+    </a>
+    <a th:href="@{/tramites}" class="flex flex-col items-center text-slate-400">
+        <i class="fas fa-file-invoice text-xl"></i>
+        <span class="text-[9px] font-bold mt-1">Trámites</span>
+    </a>
+    <a th:href="@{/sedes}" class="flex flex-col items-center text-slate-400">
+        <i class="fas fa-map-marked-alt text-xl"></i>
+        <span class="text-[9px] font-bold mt-1">Sedes</span>
+    </a>
+    <a th:href="@{/comunidad}" class="flex flex-col items-center text-[#1e3a8a]">
+        <i class="fas fa-users text-xl"></i>
+        <span class="text-[9px] font-black mt-1">Foro</span>
+    </a>
+    <a th:href="@{/mis-citas}" class="flex flex-col items-center text-slate-400">
+        <i class="fas fa-calendar-check text-xl"></i>
+        <span class="text-[9px] font-bold mt-1">Citas</span>
+    </a>
 </div>
+
 </body>
 </html>
