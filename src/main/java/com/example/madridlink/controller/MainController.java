@@ -85,11 +85,16 @@ public class MainController {
         return verDetalles(lista.get(0).getId(), model, principal);
     }
 
-    @GetMapping("/sedes")
+    @GetMapping({"/sedes", "/sedes/buscar"})
     public String verSedes(@RequestParam(name = "q", required = false) String query, Model model) {
-        model.addAttribute("sedes", (query != null && !query.isEmpty())
-                ? sedeRepository.findByNombreContainingIgnoreCase(query)
-                : sedeRepository.findAll());
+        List<Sede> resultados;
+        if (query != null && !query.isEmpty()) {
+            resultados = sedeRepository.findByNombreContainingIgnoreCase(query);
+        } else {
+            resultados = sedeRepository.findAll();
+        }
+        model.addAttribute("sedes", resultados);
+        model.addAttribute("query", query); // Esto es para que la palabra no se borre del buscador
         return "sedes";
     }
 }

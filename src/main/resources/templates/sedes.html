@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MadriLink | Directorio de Sedes</title>
+    <title>MadriLink | Sedes</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
         :root { --primary: #1e3a8a; --bg: #f8fafc; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: #333; }
         body::-webkit-scrollbar { display: none; }
 
-        /* BUSCADOR COMPACTO */
-        .search-box { background: white; padding: 12px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; gap: 8px; }
-        .search-box input { flex: 1; padding: 10px; border: 1px solid #eee; border-radius: 12px; outline: none; font-size: 14px; }
-        .btn-buscar { background: var(--primary); color: white; padding: 10px 15px; border-radius: 12px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        /* BUSCADOR MÁS COMPACTO PARA MÓVIL */
+        .search-box { background: white; padding: 6px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; gap: 4px; border: 1px solid #f1f5f9; }
+        .search-box input { flex: 1; padding: 10px 15px; border: none; outline: none; font-size: 14px; background: transparent; }
+        .btn-buscar { background: var(--primary); color: white; padding: 10px 18px; border-radius: 14px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
 
-        /* GRID DE SEDES OPTIMIZADO */
         .grid-sedes {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -32,16 +31,15 @@
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
             display: flex;
             flex-direction: column;
-            transition: 0.2s;
         }
         .sede-card h3 { color: var(--primary); font-size: 1rem; font-weight: 800; margin-bottom: 12px; line-height: 1.2; }
         .info-item { font-size: 0.75rem; margin-bottom: 8px; color: #64748b; }
-        .info-item strong { color: #334155; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.05em; }
+        .info-item strong { color: #334155; text-transform: uppercase; font-size: 0.65rem; }
 
         .btn-mapa {
             display: flex; align-items: center; justify-content: center; gap: 6px;
-            margin-top: 12px; padding: 10px; background: #1e3a8a; color: white;
-            border-radius: 12px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase;
+            margin-top: 12px; padding: 12px; background: #1e3a8a; color: white;
+            border-radius: 14px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase;
         }
     </style>
 </head>
@@ -49,10 +47,11 @@
 
 <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
-        <div class="flex items-center gap-4">
-            <a th:href="@{/}">
-                <img th:src="@{/images/logo4.png}" alt="Logo" class="h-8 md:h-9 w-auto">
+        <div class="flex items-center gap-3">
+            <a th:href="@{/}" class="bg-[#1e3a8a] text-white p-2.5 rounded-xl shadow-md active:scale-90 transition-all">
+                <i class="fas fa-home text-sm"></i>
             </a>
+            <img th:src="@{/images/logo4.png}" alt="Logo" class="h-8 w-auto">
         </div>
 
         <div th:if="${#authorization.expression('isAuthenticated()')}" class="flex items-center gap-2">
@@ -68,16 +67,18 @@
     </div>
 </nav>
 
-<main class="max-w-6xl mx-auto px-4 py-6">
+<main class="max-w-4xl mx-auto px-4 py-6">
 
     <div class="text-center mb-6">
-        <h1 class="text-xl md:text-2xl font-black text-slate-800 tracking-tight">Oficinas en Madrid</h1>
-        <p class="text-[11px] text-slate-400 uppercase font-bold tracking-widest mt-1">Encuentra tu centro más cercano</p>
+        <h1 class="text-2xl font-black text-slate-800 tracking-tight">Oficinas en Madrid</h1>
+        <p class="text-[10px] text-slate-400 uppercase font-bold tracking-widest mt-1">Busca tu centro más cercano</p>
     </div>
 
     <form th:action="@{/sedes/buscar}" method="get" class="search-box max-w-md mx-auto mb-8">
-        <input type="text" name="q" placeholder="Ej: Aluche, Pradillo..." th:value="${param.q}">
-        <button type="submit" class="btn-buscar">BUSCAR</button>
+        <input type="text" name="q" placeholder="Ej: Aluche, Pradillo..." th:value="${query != null ? query : ''}">
+        <button type="submit" class="btn-buscar">
+            <i class="fas fa-search"></i>
+        </button>
     </form>
 
     <div class="grid-sedes">
@@ -100,41 +101,35 @@
             </div>
 
             <a th:href="'https://www.google.com/maps/search/?api=1&query=' + ${sede.nombre} + ' ' + ${sede.direccion}"
-               target="_blank" class="btn-mapa">
+               target="_blank" class="btn-mapa active:scale-95 transition-all">
                 <i class="fas fa-location-arrow"></i> Cómo llegar
             </a>
         </div>
     </div>
 
     <div th:if="${#lists.isEmpty(sedes)}" class="text-center py-12">
-        <div class="bg-white inline-block p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+        <div class="bg-white inline-block p-8 rounded-[2rem] border border-dashed border-slate-200 w-full max-w-xs">
             <i class="fas fa-search-location text-slate-200 text-4xl mb-3"></i>
-            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">No hay resultados</p>
-            <a th:href="@{/sedes}" class="text-[#1e3a8a] text-[10px] font-black uppercase mt-4 block">Ver todas las sedes</a>
+            <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">No hay resultados</p>
+            <a th:href="@{/sedes}" class="text-[#1e3a8a] text-[10px] font-black uppercase mt-4 block underline">Ver todas las sedes</a>
         </div>
-    </div>
-
-    <div class="text-center mt-10">
-        <a th:href="@{/}" class="inline-flex items-center gap-2 bg-slate-100 text-slate-500 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">
-            <i class="fas fa-home"></i> Volver al Inicio
-        </a>
     </div>
 </main>
 
 <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 px-8 py-3 flex justify-between items-center z-[100] shadow-2xl">
-    <a th:href="@{/}" class="flex flex-col items-center text-slate-400">
+    <a th:href="@{/}" class="text-slate-400 flex flex-col items-center">
         <i class="fas fa-home text-xl"></i>
         <span class="text-[9px] font-bold mt-1">Inicio</span>
     </a>
-    <a th:href="@{/tramites}" class="flex flex-col items-center text-slate-400">
+    <a th:href="@{/tramites}" class="text-slate-400 flex flex-col items-center">
         <i class="fas fa-file-invoice text-xl"></i>
         <span class="text-[9px] font-bold mt-1">Trámites</span>
     </a>
-    <a th:href="@{/sedes}" class="flex flex-col items-center text-[#1e3a8a]">
+    <a th:href="@{/sedes}" class="text-[#1e3a8a] flex flex-col items-center">
         <i class="fas fa-map-marked-alt text-xl"></i>
         <span class="text-[9px] font-black mt-1">Sedes</span>
     </a>
-    <a th:href="@{/mis-citas}" class="flex flex-col items-center text-slate-400">
+    <a th:href="@{/mis-citas}" class="text-slate-400 flex flex-col items-center">
         <i class="fas fa-calendar-check text-xl"></i>
         <span class="text-[9px] font-bold mt-1">Citas</span>
     </a>
