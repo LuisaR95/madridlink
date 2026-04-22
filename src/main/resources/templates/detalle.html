@@ -14,7 +14,6 @@
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .animate-slide-up { animation: slideUp 0.3s ease-out; }
 
-        /* Estilo para el carrusel de consejos */
         .consejos-carousel {
             display: flex;
             overflow-x: auto;
@@ -101,10 +100,12 @@
                 <i class="fas fa-chevron-right text-slate-300"></i>
             </button>
         </th:block>
+
         <button th:if="${tramite.id == 2}" onclick="openModal('modalHoja')" class="flex items-center justify-between p-4 bg-white border border-emerald-50 rounded-2xl shadow-sm">
             <div class="flex items-center gap-3"><i class="fas fa-file-signature text-emerald-600"></i><span class="text-[11px] font-black text-emerald-700 uppercase tracking-widest">Guía Hoja Padronal: Paso a Paso</span></div>
             <i class="fas fa-chevron-right text-slate-300"></i>
         </button>
+
         <button th:if="${tramite.id == 3}" onclick="openModal('modalAbono')" class="flex items-center justify-between p-4 bg-white border border-red-50 rounded-2xl shadow-sm">
             <div class="flex items-center gap-3"><i class="fas fa-credit-card text-red-600"></i><span class="text-[11px] font-black text-red-700 uppercase tracking-widest">Guía Pago: Paso a Paso</span></div>
             <i class="fas fa-chevron-right text-slate-300"></i>
@@ -182,9 +183,55 @@
     </div>
 </div>
 
+<div id="modalHoja" class="hidden fixed inset-0 z-[1000] flex items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white w-full sm:max-w-xl rounded-t-[2.5rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl animate-slide-up">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+            <h3 class="font-black text-emerald-700 uppercase text-[11px] tracking-widest">Guía: Hoja Padronal</h3>
+            <button onclick="closeModal('modalHoja')" class="text-slate-400 text-2xl">&times;</button>
+        </div>
+        <div class="p-6 md:p-8 text-[14px] text-slate-600 space-y-4 max-h-[70vh] overflow-y-auto">
+            <div class="bg-emerald-50 p-5 rounded-2xl border border-emerald-100 text-emerald-800 leading-relaxed">
+                <p class="font-bold mb-2 uppercase text-[10px]">📍 Pasos Clave:</p>
+                <ul class="list-disc pl-4 space-y-3">
+                    <li>Rellena tus datos y los de todas las personas que viven contigo.</li>
+                    <li>Debe firmar el dueño del piso o el titular del contrato.</li>
+                    <li>Lleva el contrato de alquiler original y una copia.</li>
+                </ul>
+            </div>
+            <a href="https://www.madrid.es/portales/munimadrid/es/Inicio/Actualidad/Actividades-y-eventos/1-Solicitud-de-empadronamiento/?vgnextoid=7b58135408e04810VgnVCM1000008a4a900aRCRD&vgnextchannel=ca9671ee4a9eb410VgnVCM100000171f5a0aRCRD" target="_blank" class="block w-full bg-emerald-600 text-white text-center py-4 rounded-2xl font-black uppercase text-[11px]">Descargar Hoja Padronal</a>
+        </div>
+    </div>
+</div>
+
+<div id="modalAbono" class="hidden fixed inset-0 z-[1000] flex items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white w-full sm:max-w-xl rounded-t-[2.5rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl animate-slide-up">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+            <h3 class="font-black text-red-700 uppercase text-[11px] tracking-widest">Guía: Tarjeta de Transporte</h3>
+            <button onclick="closeModal('modalAbono')" class="text-slate-400 text-2xl">&times;</button>
+        </div>
+        <div class="p-6 md:p-8 text-[14px] text-slate-600 space-y-4 max-h-[70vh] overflow-y-auto">
+            <div class="bg-red-50 p-5 rounded-2xl border border-red-100 text-red-800 space-y-3">
+                <p class="font-bold text-[10px] uppercase">💳 Instrucciones:</p>
+                <ul class="list-decimal pl-4 space-y-2">
+                    <li>Solicita la tarjeta online o en estancos autorizados.</li>
+                    <li>Si es tu primera vez, paga la tasa de emisión (4€).</li>
+                    <li>Carga el abono mensual en las máquinas automáticas del Metro.</li>
+                </ul>
+            </div>
+            <a href="https://webttp.comunidad.madrid/CRTM-ABONOS/entrada.aspx?s=individual" target="_blank" class="block w-full bg-red-600 text-white text-center py-4 rounded-2xl font-black uppercase text-[11px]">Solicitar Tarjeta Online</a>
+        </div>
+    </div>
+</div>
+
 <script>
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.body.style.overflow = 'auto'; }
+    function openModal(id) {
+        document.getElementById(id).classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
 </script>
 
 </body>

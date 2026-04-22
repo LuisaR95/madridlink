@@ -12,7 +12,6 @@
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: #333; }
         body::-webkit-scrollbar { display: none; }
 
-        /* BUSCADOR MÁS COMPACTO PARA MÓVIL */
         .search-box { background: white; padding: 6px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; gap: 4px; border: 1px solid #f1f5f9; }
         .search-box input { flex: 1; padding: 10px 15px; border: none; outline: none; font-size: 14px; background: transparent; }
         .btn-buscar { background: var(--primary); color: white; padding: 10px 18px; border-radius: 14px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
@@ -75,7 +74,7 @@
     </div>
 
     <form th:action="@{/sedes/buscar}" method="get" class="search-box max-w-md mx-auto mb-8">
-        <input type="text" name="q" placeholder="Ej: Aluche, Pradillo..." th:value="${query != null ? query : ''}">
+        <input type="text" name="q" placeholder="Ej: Aluche, Pradillo..." th:value="${query}">
         <button type="submit" class="btn-buscar">
             <i class="fas fa-search"></i>
         </button>
@@ -130,4 +129,10 @@
         <span class="text-[9px] font-black mt-1">Sedes</span>
     </a>
     <a th:href="@{/mis-citas}" class="text-slate-400 flex flex-col items-center">
-        <i class="fas fa-calendar-check text-x
+        <i class="fas fa-calendar-check text-xl"></i>
+        <span class="text-[9px] font-bold mt-1">Citas</span>
+    </a>
+</div>
+
+</body>
+</html>
